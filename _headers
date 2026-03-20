@@ -1,0 +1,6 @@
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: no-referrer-when-downgrade
+  X-XSS-Protection: 1; mode=block
+  Content-Security-Policy: upgrade-insecure-requests

@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sri Sai Traders – Kurnool | Easy WhatsApp Grocery Ordering</title>
+    <meta name="description"
+        content="Order groceries in 2 minutes via WhatsApp at Sri Sai Traders Kurnool. Your trusted local store for fresh dairy, cool drinks, and essentials in B-Camp.">
+    <meta name="keywords"
+        content="Sri Sai Traders, Kurnool Grocery, WhatsApp Order, Dairy, Cool Drinks, B-Camp, Srinagar Colony">
+    <meta name="google-site-verification" content="G936L6eSRxG_GM3d_F0z96SvJYBTIfzj_1762otsMSY" />
+    <!-- Security Policies -->
+    <meta http-equiv="Referrer-Policy" content="no-referrer-when-downgrade">
+    <meta http-equiv="Permissions-Policy" content="geolocation=(), camera=(), microphone=()">
+
+    <!-- Preload Critical Assets -->
+    <link rel="preload" href="assets/logo.jpg" as="image">
+    <link rel="preload" href="assets/shop%20front.jpeg" as="image">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Sri Sai Traders Kurnool | Premium General Store">
+    <meta property="og:description"
+        content="Your one-stop premium destination for Dairy, Groceries, Disposables & more at B-Camp, Kurnool.">
+    <meta property="og:type" content="website">
+
+    <!-- Google Fonts: Outfit + Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome 6 Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/logo.jpg">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Top Offer Banner -->
+    <div class="offer-banner" id="offer-banner">
+        <div class="banner-content">
+            <i class="fas fa-certificate"></i>
+            <span>Special Discounts Available Today! Order via WhatsApp 🚀</span>
+            <button class="banner-close" id="close-banner" aria-label="Close Banner">&times;</button>
+        </div>
+    </div>
+
+    <!-- Particle Background Canvas -->
+    <canvas id="particle-canvas" aria-hidden="true"></canvas>
+
+    <!-- Floating UI: Cart & WhatsApp -->
+    <div class="floating-controls">
+        <button id="cart-toggle" class="cart-btn-floating" aria-label="View Cart">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-count">0</span>
+        </button>
+    </div>
+
+    <!-- Quick View Modal -->
+    <div id="quick-view-modal" class="modal">
+        <div class="modal-content glass">
+            <span class="close-modal">&times;</span>
+            <div class="modal-body">
+                <div class="modal-img-container">
+                    <img id="modal-img" src="" alt="Product Image">
+                </div>
+                <div class="modal-details">
+                    <h2 id="modal-title"></h2>
+                    <p id="modal-price" class="modal-price"></p>
+                    <p id="modal-desc"></p>
+                    <div class="modal-actions">
+                        <button id="modal-add-to-cart" class="btn btn-primary">
+                            <i class="fas fa-cart-plus"></i> Add to Cart
+                        </button>
+                        <a id="modal-wa-order" href="" target="_blank" class="btn btn-whatsapp">
+                            <i class="fab fa-whatsapp"></i> Buy via WhatsApp
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Sidebar/Modal -->
+    <div id="cart-sidebar" class="cart-sidebar glass">
+        <div class="cart-header">
+            <h3>My Shopping Cart</h3>
+            <button class="close-cart">&times;</button>
+        </div>
+        <div id="cart-items-container" class="cart-items">
+            <!-- Items injected by JS -->
+            <p class="empty-cart-msg">Your cart is empty.</p>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total Items: </span>
+                <span id="cart-total-count">0</span>
+            </div>
+            <button id="checkout-whatsapp" class="btn btn-whatsapp btn-block">
+                <i class="fab fa-whatsapp"></i> Checkout via WhatsApp
+            </button>
+        </div>
+    </div>
+
+    <!-- ========== NAVIGATION ========== -->
+    <nav id="navbar" class="navbar glass" role="navigation" aria-label="Main Navigation">
+        <div class="nav-container">
+            <a href="#home" class="logo" aria-label="Sri Sai Traders Home">
+                <img src="assets/logo.jpg" alt="Sri Sai Traders Logo" class="nav-logo" loading="lazy">
+                <span class="gradient-text">Sri Sai Traders</span>
+            </a>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="#home" class="active">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#dairy-farm">Farm</a></li>
+                <li><a href="#categories">Order Section</a></li>
+                <li><a href="#featured">Featured</a></li>
+                <li><a href="#gallery">Gallery</a></li>
+                <li><a href="#why-us">Why Us</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger" aria-label="Toggle Menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ========== HERO SECTION ========== -->
+    <section id="home" class="hero">
+        <div class="hero-bg-glow"></div>
+        <div class="hero-content reveal">
+            <img src="assets/logo.jpg" alt="Sri Sai Traders Logo" class="hero-logo">
+            <div class="hero-badges">
+                <div class="hero-badge glass">
+                    <i class="fas fa-cow"></i> 10+ Years Experience in Dairy Farming
+                </div>
+                <div class="ordering-badge">
+                    <i class="fab fa-whatsapp"></i> Ordering Available
+                </div>
+            </div>
+            <h1 class="hero-title">
+                Sri Sai Traders – <span class="gradient-text">Kurnool</span>
+            </h1>
+            <p class="hero-subtitle">
+                Fresh Milk & Daily Essentials at Your Convenience
+            </p>
+            <p class="hero-description"
+                style="font-size: 1.1rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 30px;">
+                With 10+ years of experience in dairy farming, we bring you fresh milk along with quality groceries and
+                daily essentials for your home.
+            </p>
+            <div class="hero-buttons">
+                <a href="#categories" class="btn btn-primary glow-btn">
+                    <i class="fas fa-shopping-basket"></i> Order Now
+                </a>
+                <a href="tel:8639602820" class="btn btn-glass">
+                    <i class="fas fa-phone-alt"></i> Call Now
+                </a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-number" data-count="10">0</span><span class="stat-plus">+</span>
+                    <span class="stat-label">Years Dairy Experience</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-number" data-count="500">0</span><span class="stat-plus">+</span>
+                    <span class="stat-label">Products</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-number" data-count="1000">0</span><span class="stat-plus">+</span>
+                    <span class="stat-label">Happy Customers</span>
+                </div>
+            </div>
+        </div>
+        <div class="hero-visual reveal">
+            <div class="hero-image-wrapper">
+                <!-- Replace this image with your own shop front photo if needed -->
+                <img src="assets/shop front.jpeg" alt="Sri Sai Traders Shop Front" class="hero-shop-img"
+                    loading="eager">
+                <div class="hero-img-overlay"></div>
+                <div class="floating-badge glass">
+                    <i class="fas fa-clock"></i> Open 6 AM – 9 PM
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== DELIVERY & TRUST SECTION ========== -->
+    <section class="trust-delivery-section">
+        <div class="container-narrow">
+            <div class="trust-grid">
+                <div class="trust-box reveal">
+                    <div class="trust-icon"><i class="fas fa-truck-fast"></i></div>
+                    <h3>Fast Delivery</h3>
+                    <p>Available in Kurnool City</p>
+                </div>
+                <div class="trust-box reveal">
+                    <div class="trust-icon"><i class="fas fa-hand-holding-dollar"></i></div>
+                    <h3>Cash on Delivery</h3>
+                    <p>Pay when you receive</p>
+                </div>
+                <div class="trust-box reveal">
+                    <div class="trust-icon"><i class="fas fa-clock"></i></div>
+                    <h3>Same-Day Order</h3>
+                    <p>Order before 11 AM</p>
+                </div>
+                <div class="trust-box reveal">
+                    <div class="trust-icon"><i class="fas fa-award"></i></div>
+                    <h3>Fresh Quality</h3>
+                    <p>Direct from Sources</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== TRUST STRIP ========== -->
+    <div class="trust-strip glass">
+        <div class="trust-item">
+            <i class="fas fa-star text-yellow"></i> <span>10+ Years Dairy Experience</span>
+        </div>
+        <div class="trust-item">
+            <i class="fas fa-truck-fast text-cyan"></i> <span>Daily Fresh Supply</span>
+        </div>
+        <div class="trust-item">
+            <i class="fas fa-shield-halved text-green"></i> <span>100% No Adulteration</span>
+        </div>
+        <div class="trust-item">
+            <i class="fas fa-store text-purple"></i> <span>Local Trusted Store</span>
+        </div>
+    </div>
+
+    <!-- ========== ABOUT SECTION ========== -->
+    <section id="about" class="about section-padding">
+        <div class="about-wrapper glass reveal">
+            <div class="about-image">
+                <!-- Replace this image with your own shop interior photo if needed -->
+                <img src="assets/shop front.jpeg" alt="Sri Sai Traders Store Interior" loading="lazy">
+            </div>
+            <div class="about-content">
+                <span class="section-badge"><i class="fas fa-info-circle"></i> ABOUT US</span>
+                <span class="ordering-badge"><i class="fab fa-whatsapp"></i> Ordering Available</span>
+                <h2>Kurnool's Trusted <span class="gradient-text">Local Store</span></h2>
+
+                <p>Sri Sai Traders is a local store in Kurnool offering fresh milk, groceries, and daily household
+                    essentials. With over 10 years of experience in dairy farming, we ensure fresh and hygienic milk
+                    directly from our farm. Along with dairy, we also provide a wide range of products to meet your
+                    everyday needs.</p>
+
+                <p>We pride ourselves on providing high-quality products and fresh supply that our community has relied
+                    on for years. Whether you need your daily milk or household items, we are here to serve you with
+                    honesty and quality.</p>
+
+                <div class="about-features">
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>GST Registered Business</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Wholesale & Retail Available</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Quality Products Guaranteed</span>
+                    </div>
+                    <div class="feature-item ordering-highlight">
+                        <i class="fab fa-whatsapp"></i>
+                        <span><strong>Order via WhatsApp & Pickup</strong></span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Daily Fresh Milk Supply</span>
+                    </div>
+                </div>
+
+                <div class="about-buttons">
+                    <a href="#categories" class="btn btn-primary glow-btn"><i class="fas fa-shopping-cart"></i> Go to
+                        Order Section</a>
+                    <a href="tel:8639602820" class="btn btn-glass"><i class="fas fa-phone-alt"></i> Call Now</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== OUR DAIRY FARM SECTION ========== -->
+    <section id="dairy-farm" class="dairy-farm section-padding">
+        <div class="dairy-wrapper reveal">
+            <div class="dairy-content">
+                <span class="section-badge"><i class="fas fa-cow"></i> DIRECT FROM FARM</span>
+                <h2>Our <span class="gradient-text">Dairy Farm</span></h2>
+                <h4 class="dairy-tagline">"From our farm to your home"</h4>
+
+                <p>Our strength is our dairy farm. With 10+ years of hands-on experience, we ensure fresh, clean, and
+                    hygienic milk every day. Our focus is on quality, care, and natural sourcing. We believe in
+                    providing pure milk directly from our farm to your home.</p>
+
+                <div class="dairy-features">
+                    <div class="feature-item">
+                        <i class="fas fa-leaf"></i>
+                        <span>100% Fresh Milk</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-hand-holding-heart"></i>
+                        <span>Hygienic Milking Process</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-truck-fast"></i>
+                        <span>Daily Supply</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-shield-halved"></i>
+                        <span>Trusted Local Source</span>
+                    </div>
+                </div>
+
+                <div class="trust-tags">
+                    <span class="trust-tag glass">#DirectSourcing</span>
+                    <span class="trust-tag glass">#PureQuality</span>
+                </div>
+
+                <div class="dairy-cta-wrap">
+                    <a href="tel:8639602820" class="btn btn-primary glow-btn">
+                        <i class="fas fa-phone-alt"></i> Order Fresh Milk Now
+                    </a>
+                </div>
+            </div>
+
+            <div class="dairy-visual">
+                <div class="dairy-grid">
+                    <!-- Featured: Our Animals (Big) -->
+                    <div class="dairy-grid-item featured-grid-item">
+                        <img src="assets/dairy4.jpg" alt="Healthy Buffaloes at our Farm" loading="lazy">
+                        <div class="grid-caption">Our Animals</div>
+                    </div>
+                    <!-- Small Grid Items -->
+                    <div class="dairy-grid-item">
+                        <img src="assets/dairy1.jpg" alt="Sri Sai Traders Dairy Farm View" loading="lazy">
+                        <div class="grid-caption">Farm View</div>
+                    </div>
+                    <div class="dairy-grid-item">
+                        <img src="assets/dairy2.jpg" alt="Buffalo Feed & Hay Storage" loading="lazy">
+                        <div class="grid-caption">Storage Area</div>
+                    </div>
+                    <div class="dairy-grid-item">
+                        <img src="assets/dairy3.jpg" alt="Hygienic Milking Process" loading="lazy">
+                        <div class="grid-caption">Milking Process</div>
+                    </div>
+                    <div class="dairy-grid-item rotated-img">
+                        <img src="assets/dairy5.jpg" alt="Sri Sai Traders Milk Collection Process" loading="lazy">
+                        <div class="grid-caption">Milk Collection</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== APP-LIKE ORDER SECTION ========== -->
+    <section id="order-section" class="app-order-section section-padding">
+
+        <!-- Sticky Search & Filter Header -->
+        <div class="sticky-filter-bar glass">
+            <div class="container-narrow">
+                <div class="filter-controls-top">
+                    <div class="search-container">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" id="product-search" placeholder="Search products (e.g., Milk, Rice)...">
+                    </div>
+                    <div class="sort-container">
+                        <select id="product-sort" class="glass-select">
+                            <option value="featured">🔥 Popular First</option>
+                            <option value="price-low">Price: Low to High</option>
+                            <option value="price-high">Price: High to Low</option>
+                            <option value="name-az">Name: A to Z</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="filter-chips" id="filter-chips-container">
+                    <button class="filter-chip active" data-filter="All">All Items</button>
+                    <!-- Other Category chips injected by JS -->
+                </div>
+            </div>
+        </div>
+
+        <div class="container-narrow">
+
+            <!-- Category Grid (Top) -->
+            <div class="app-category-section">
+                <div class="section-header-small reveal">
+                    <h3>Explore Categories</h3>
+                    <p class="text-secondary" style="margin-top: 10px;">Browse and order your daily essentials easily
+                        via WhatsApp. We provide fresh milk, groceries, and household items at fair prices.</p>
+                </div>
+                <div id="product-categories-container" class="app-category-grid">
+                    <!-- Dynamic Category Cards will be injected here -->
+                    <div class="loading-spinner">Loading categories...</div>
+                </div>
+            </div>
+
+            <!-- Main Product Grid -->
+            <div class="app-product-section" style="margin-top: 40px;">
+                <div class="section-header-small reveal">
+                    <h3><span id="current-category-title">All Products</span></h3>
+                    <p id="search-result-count" class="text-muted" style="font-size: 0.85rem; margin-top: 5px;"></p>
+                </div>
+
+                <div id="featured-products-container" class="app-product-grid">
+                    <!-- Dynamic Featured Products will be injected here -->
+                    <div class="loading-spinner">Loading products...</div>
+                </div>
+            </div>
+
+            <!-- Build Custom Order CTA -->
+            <div class="build-order-container reveal" style="margin-top: 50px; text-align: center;">
+                <h4 style="margin-bottom: 15px; color: var(--text-primary);">Can't find what you need?</h4>
+                <a href="https://wa.me/918639602820?text=Hi%20Sri%20Sai%20Traders,%0A%0AMy%20Name:%20%0AMobile%20Number:%20%0A%0AI%20want%20to%20order:%0A1.%20%0A2.%20%0A3.%20%0A%0AI%20will%20collect%20from%20shop."
+                    target="_blank" rel="noopener" class="btn btn-outline-glow">
+                    📝 Build Custom Order on WhatsApp
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- ========== REAL IMAGE GALLERY ========== -->
+    <section id="gallery" class="gallery section-padding">
+        <div class="section-header reveal">
+            <span class="section-badge"><i class="fas fa-images"></i> OUR STORE</span>
+            <h2>Store <span class="gradient-text">Gallery</span></h2>
+            <p>A glimpse inside Sri Sai Traders</p>
+        </div>
+        <div class="gallery-grid">
+            <!-- Replace these images with your own real shop photos if needed -->
+            <div class="gallery-item glass reveal">
+                <img src="assets/shop front.jpeg" alt="Sri Sai Traders Shop Front" loading="lazy">
+                <div class="gallery-caption">Shop Front</div>
+            </div>
+            <div class="gallery-item glass reveal">
+                <!-- Real shop image: Fridge with cool drinks -->
+                <img src="assets/cool-drinks.jpeg" alt="Chilled Beverages" loading="lazy">
+                <div class="gallery-caption">Drinks Section</div>
+            </div>
+            <div class="gallery-item glass reveal">
+                <!-- Real shop image: Colorful disposable bags & cups -->
+                <img src="assets/carry-bags.jpeg" alt="Disposable Items Collection" loading="lazy">
+                <div class="gallery-caption">Disposable Items</div>
+            </div>
+            <div class="gallery-item glass reveal">
+                <!-- Real shop image: Grocery dals and pulses shelves -->
+                <img src="assets/grocery.jpg" alt="Grocery Shelves" loading="lazy">
+                <div class="gallery-caption">Grocery Shelves</div>
+            </div>
+            <div class="gallery-item glass reveal">
+                <!-- Real shop image: Stacked paper plates -->
+                <img src="assets/paper-plates.jpeg" alt="Paper Plates Wholesale" loading="lazy">
+                <div class="gallery-caption">Paper Plates</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== CONNECT WITH US ========== -->
+    <section id="connect" class="connect section-padding">
+        <div class="connect-container reveal">
+            <div class="connect-grid-refined">
+                <!-- Left Side: Brand & Social -->
+                <div class="connect-brand-side">
+                    <span class="section-badge"><i class="fas fa-share-nodes"></i> SOCIAL HUB</span>
+                    <h2>Connect <span class="gradient-text">With Us</span></h2>
+                    <p class="connect-subtext">Follow our journey, see daily updates, and stay connected with our store
+                        for the latest fresh stock and exclusive community offers.</p>
+
+                    <div class="insta-block glass">
+                        <div class="insta-header">
+                            <div class="insta-icon-glow">
+                                <i class="fab fa-instagram"></i>
+                            </div>
+                            <div class="insta-info">
+                                <h4>@srisaitraders_kurnool</h4>
+                                <p>Official Instagram Page</p>
+                            </div>
+                        </div>
+                        <p class="insta-promo">Fresh arrivals, milk center highlights, and daily store updates — all in
+                            one place.</p>
+                        <a href="https://www.instagram.com/srisaitraders_kurnool" target="_blank" rel="noopener"
+                            class="btn btn-insta-glow btn-block">
+                            Follow on Instagram
+                        </a>
+                    </div>
+
+                    <p class="contact-hint">For orders and business inquiries, please visit our <a href="#contact"
+                            class="context-link">Contact</a> section.</p>
+                </div>
+
+                <!-- Right Side: Review System -->
+                <div class="connect-review-side">
+                    <div class="review-system-card glass-premium">
+                        <div class="card-header-flex">
+                            <h3>Customer Reviews</h3>
+                            <div class="rating-summary-premium">
+                                <span class="avg-val-big" id="avg-display">4.8</span>
+                                <div class="avg-stars-wrap">
+                                    <div class="stars-gold"><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                            class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                            class="fas fa-star-half-alt"></i></div>
+                                    <p id="review-count-text">Based on 0 reviews</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Interactive Form -->
+                        <form id="review-form" class="review-form-premium">
+                            <div class="star-rating-input" role="radiogroup" aria-label="Rate your experience">
+                                <button type="button" class="star-btn" data-value="1" aria-label="1 Star"><i
+                                        class="fas fa-star"></i></button>
+                                <button type="button" class="star-btn" data-value="2" aria-label="2 Stars"><i
+                                        class="fas fa-star"></i></button>
+                                <button type="button" class="star-btn" data-value="3" aria-label="3 Stars"><i
+                                        class="fas fa-star"></i></button>
+                                <button type="button" class="star-btn" data-value="4" aria-label="4 Stars"><i
+                                        class="fas fa-star"></i></button>
+                                <button type="button" class="star-btn" data-value="5" aria-label="5 Stars"><i
+                                        class="fas fa-star"></i></button>
+                                <input type="hidden" id="rating-value" value="0">
+                            </div>
+                            <div class="form-inputs">
+                                <input type="text" id="review-name" placeholder="Your Name" required maxlength="30">
+                                <textarea id="review-text" placeholder="Tell others about your experience..." required
+                                    maxlength="200"></textarea>
+                                <button type="submit" id="submit-review" class="btn btn-primary glow-btn btn-block">Post
+                                    Review <i class="fas fa-paper-plane"></i></button>
+                            </div>
+                            <div id="form-feedback" class="form-feedback"></div>
+                        </form>
+
+                        <!-- Review Feed -->
+                        <div id="reviews-feed" class="reviews-feed-container">
+                            <!-- Dynamic content injected via JS -->
+                            <div class="review-empty">Be the first to share your experience with us!</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== WHY CHOOSE US ========== -->
+    <section id="why-us" class="why-us section-padding">
+        <div class="section-header reveal">
+            <span class="section-badge"><i class="fas fa-trophy"></i> OUR PROMISE</span>
+            <h2>Why Choose <span class="gradient-text">Us</span></h2>
+            <p>What makes Sri Sai Traders stand out</p>
+        </div>
+        <div class="why-grid">
+            <div class="why-card glass tilt-card reveal">
+                <div class="why-icon"><i class="fas fa-cow"></i></div>
+                <h3>Dairy Farm Fresh</h3>
+                <p>Fresh milk directly from our own dairy farm, ensured for quality and hygiene.</p>
+            </div>
+            <div class="why-card glass tilt-card reveal">
+                <div class="why-icon"><i class="fas fa-shopping-basket"></i></div>
+                <h3>Quality Essentials</h3>
+                <p>Handpicked groceries and daily household essentials for your everyday needs.</p>
+            </div>
+            <div class="why-card glass tilt-card reveal">
+                <div class="why-icon"><i class="fab fa-whatsapp"></i></div>
+                <h3>Easy Ordering</h3>
+                <p>Simple and fast WhatsApp ordering system designed for your convenience.</p>
+            </div>
+            <div class="why-card glass tilt-card reveal">
+                <div class="why-icon"><i class="fas fa-house-chimney"></i></div>
+                <h3>Trusted Local Service</h3>
+                <p>Proudly serving the families of Kurnool with trust and dedicated local service.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== CONTACT SECTION ========== -->
+    <section id="contact" class="contact section-padding">
+        <div class="section-header reveal">
+            <span class="section-badge"><i class="fas fa-envelope"></i> REACH OUT</span>
+            <h2>Get In <span class="gradient-text">Touch</span></h2>
+            <p>Feel free to contact us for any inquiries or orders. We are happy to serve you.</p>
+        </div>
+        <div class="contact-wrapper reveal">
+            <div class="contact-info glass">
+                <div class="contact-card">
+                    <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                    <div>
+                        <h4>Our Location</h4>
+                        <p>Srinagar Colony, Salam Nagar,<br>B Camp, Kalluru,<br>Kurnool, AP 518002, India</p>
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon"><i class="fas fa-phone-alt"></i></div>
+                    <div>
+                        <h4>Phone Numbers</h4>
+                        <p>
+                            <a href="tel:8639602820" class="contact-link">+91 8639602820</a><br>
+                            <a href="tel:9440240677" class="contact-link">+91 9440240677</a>
+                        </p>
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon"><i class="fas fa-clock"></i></div>
+                    <div>
+                        <h4>Working Hours</h4>
+                        <p>Monday – Sunday<br><strong>6:00 AM – 9:00 PM</strong></p>
+                    </div>
+                </div>
+
+                <div class="contact-actions">
+                    <a href="tel:8639602820" class="btn btn-primary glow-btn btn-block">
+                        <i class="fas fa-phone-alt"></i> Call Now — 8639602820
+                    </a>
+                    <a href="tel:9440240677" class="btn btn-glass btn-block">
+                        <i class="fas fa-phone-alt"></i> Call — 9440240677
+                    </a>
+                    <a href="https://wa.me/918639602820" target="_blank" rel="noopener"
+                        class="btn btn-whatsapp btn-block">
+                        <i class="fab fa-whatsapp"></i> WhatsApp Us
+                    </a>
+                    <a href="https://www.google.com/maps/dir/?api=1&destination=Srinagar+Colony+Salam+Nagar+B+Camp+Kalluru+Kurnool+Andhra+Pradesh+518002"
+                        target="_blank" rel="noopener" class="btn btn-directions btn-block">
+                        <i class="fas fa-directions"></i> Get Directions
+                    </a>
+                </div>
+            </div>
+            <div class="contact-map glass">
+                <!-- Google Maps Embed — Sri Sai Traders, B-Camp, Kurnool -->
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d239.0011475924305!2d78.04581213899975!3d15.803188804376969!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bb5dd2212be7c6b%3A0xda0b01f468fc1a87!2sSri%20Sai%20Traders%20Kurnool!5e1!3m2!1sen!2sus!4v1773848941468!5m2!1sen!2sus"
+                    width="100%" height="350" style="border:0; border-radius:16px;" allowfullscreen="" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade" title="Sri Sai Traders Location Map">
+                </iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== FOOTER ========== -->
+    <footer class="footer glass" role="contentinfo">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <img src="assets/logo.jpg" alt="Sri Sai Traders Logo" class="footer-logo" loading="lazy">
+                <h3 class="gradient-text">Sri Sai Traders</h3>
+                <p>Your local store in Kurnool for fresh milk, groceries, and daily essentials. Over 10 years of
+                    experience in dairy farming, committed to quality and trust.</p>
+                <div class="footer-social">
+                    <a href="https://wa.me/918639602820" target="_blank" rel="noopener" aria-label="WhatsApp"><i
+                            class="fab fa-whatsapp"></i></a>
+                    <a href="https://www.instagram.com/srisaitraders_kurnool" target="_blank" rel="noopener"
+                        aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                </div>
+                <p class="footer-cta">Follow us for updates & offers</p>
+            </div>
+            <div class="footer-links-group">
+                <h4>Quick Links</h4>
+                <a href="#home">Home</a>
+                <a href="#about">About Us</a>
+                <a href="#categories">Categories</a>
+                <a href="#featured">Featured</a>
+                <a href="#gallery">Gallery</a>
+                <a href="#contact">Contact</a>
+            </div>
+            <div class="footer-links-group">
+                <h4>Our Products</h4>
+                <a href="#categories">Dairy Products</a>
+                <a href="#categories">Cool Drinks</a>
+                <a href="#categories">Groceries</a>
+                <a href="#categories">Disposable Items</a>
+                <a href="#categories">Snacks</a>
+                <a href="#categories">Essentials</a>
+            </div>
+            <div class="footer-contact-info">
+                <h4>Contact</h4>
+                <p><i class="fas fa-map-marker-alt"></i> Vijaya Durga College Road, B-Camp, Kurnool</p>
+                <p><a href="tel:8639602820"><i class="fas fa-phone-alt"></i> +91 8639602820</a></p>
+                <p><a href="tel:9440240677"><i class="fas fa-phone-alt"></i> +91 9440240677</a></p>
+                <p><i class="fas fa-clock"></i> 6:00 AM – 9:00 PM (All Days)</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Sri Sai Traders, Kurnool. All Rights Reserved.</p>
+        </div>
+    </footer>
+    </div>
+
+    <!-- Scroll-to-top button -->
+    <button id="scroll-top" class="scroll-top glass" aria-label="Scroll to top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <script src="script.js?v=2"></script>
+
+    <!-- ========== STICKY CART BAR (INSTAMART STYLE) ========== -->
+    <div id="sticky-cart-bar" class="sticky-cart-bar glass hide">
+        <div class="cart-bar-content">
+            <div class="cart-bar-info">
+                <i class="fas fa-shopping-basket"></i>
+                <span id="cart-item-summary">0 Items Added</span>
+            </div>
+            <button id="cart-bar-checkout" class="btn btn-primary btn-sm">
+                View Cart & Checkout <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+</body>
+
+</html>

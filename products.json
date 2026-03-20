@@ -1,0 +1,57 @@
+{
+  "categories": [
+    "Dairy Products",
+    "Cool Drinks",
+    "Grocery Items",
+    "Snacks & Chocolates",
+    "Disposable Items",
+    "Daily Essentials"
+  ],
+  "products": [
+    {
+      "id": 1,
+      "name": "Premium Milk",
+      "price": "50",
+      "image": "assets/milk.jpg",
+      "category": "Dairy Products",
+      "featured": true,
+      "description": "Farm-fresh milk delivered every morning."
+    },
+    {
+      "id": 2,
+      "name": "Chilled Beverages",
+      "price": "Market Price",
+      "image": "assets/cool-drinks.jpeg",
+      "category": "Cool Drinks",
+      "featured": true,
+      "description": "Coca-Cola, Sprite, Fanta, Maaza, Kinley."
+    },
+    {
+      "id": 3,
+      "name": "Grocery Essentials",
+      "price": "Varies",
+      "image": "assets/grocery.jpg",
+      "category": "Grocery Items",
+      "featured": true,
+      "description": "Rice, dals, pulses & daily needs."
+    },
+    {
+      "id": 4,
+      "name": "Disposable Plates & Cups",
+      "price": "Wholesale Price",
+      "image": "assets/paper-plates.jpeg",
+      "category": "Disposable Items",
+      "featured": true,
+      "description": "Eco-friendly disposables for all events."
+    },
+    {
+      "id": 5,
+      "name": "Carry Bags & Covers",
+      "price": "Bulk",
+      "image": "assets/carry-bags.jpeg",
+      "category": "Disposable Items",
+      "featured": false,
+      "description": "All types of carry bags and covers."
+    }
+  ]
+}
