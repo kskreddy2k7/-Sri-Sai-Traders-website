@@ -1,6 +1,6 @@
 # 🏪 Sri Sai Traders — Premium Business Website
 
-🌐 **Live Website:** https://srisaitraders-kurnool.netlify.app/
+🌐 **Live Website:** https://kskreddy2k7.github.io/-Sri-Sai-Traders-website/
 
 A modern, responsive, and visually appealing business website built for **Sri Sai Traders, Kurnool**.
 Designed to showcase products, improve customer reach, and provide a smooth user experience.
