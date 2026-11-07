@@ -1795,25 +1795,114 @@ body.shop-body {
 .cart-inputs-group {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    margin-bottom: 12px;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.cart-input-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.cart-input-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--sst-chocolate);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.required-star {
+    color: #DC2626;
+    font-weight: 800;
+}
+
+.cart-input-inner {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.cart-input-inner .input-icon {
+    position: absolute;
+    left: 12px;
+    font-size: 0.85rem;
+    color: var(--sst-text-muted);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.input-prefix-tag {
+    position: absolute;
+    left: 10px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--sst-warm-brown);
+    background: #EFE9DF;
+    padding: 2px 6px;
+    border-radius: 4px;
+    pointer-events: none;
+    z-index: 1;
 }
 
 .cart-input-field {
     width: 100%;
-    padding: 8px 12px;
+    padding: 9px 12px;
     background: var(--sst-white);
-    border: 1px solid var(--sst-border-light);
-    border-radius: var(--sst-radius-sm);
-    font-size: 0.82rem;
+    border: 1.5px solid var(--sst-border-light);
+    border-radius: var(--sst-radius-md);
+    font-size: 0.84rem;
     font-family: var(--sst-font-sans);
     color: var(--sst-text-main);
     box-sizing: border-box;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.cart-input-field.has-icon {
+    padding-left: 36px;
+}
+
+.cart-input-field.has-prefix {
+    padding-left: 54px;
 }
 
 .cart-input-field:focus {
     border-color: var(--sst-gold);
+    box-shadow: 0 0 0 3px rgba(212, 162, 74, 0.2);
     outline: none;
+}
+
+.cart-input-field.input-invalid {
+    border-color: #DC2626 !important;
+    background: #FFF8F8 !important;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15) !important;
+    animation: inputShake 0.35s ease-in-out;
+}
+
+@keyframes inputShake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    20%, 60% {
+        transform: translateX(-4px);
+    }
+    40%, 80% {
+        transform: translateX(4px);
+    }
+}
+
+.input-error-msg {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #DC2626;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 2px;
+    animation: lateFadeIn 0.2s ease;
 }
 
 /* Disclaimer Banner */

@@ -318,16 +318,50 @@
                 </div>
             </div>
 
-            <!-- Customer Details Form -->
-            <div class="cart-inputs-group">
-                <input type="text" id="order-customer-name" class="cart-input-field"
-                    placeholder="Your Name (Optional)" aria-label="Customer Name">
-                <input type="tel" id="order-customer-phone" class="cart-input-field"
-                    placeholder="Mobile Number (Optional)" aria-label="Customer Phone Number">
-                <select id="order-collection-type" class="cart-input-field" aria-label="Order Collection Method">
-                    <option value="Store Pickup at B-Camp, Kurnool">Store Pickup at B-Camp, Kurnool</option>
-                    <option value="Home Delivery Request (Kurnool Area)">Home Delivery Request (Kurnool Area)</option>
-                </select>
+            <!-- Customer Details Form (Required for Checkout) -->
+            <div class="cart-inputs-group" role="group" aria-label="Customer Checkout Information">
+                <div class="cart-input-wrap">
+                    <label class="cart-input-label" for="order-customer-name">
+                        Full Name <span class="required-star">*</span>
+                    </label>
+                    <div class="cart-input-inner">
+                        <i class="fas fa-user input-icon" aria-hidden="true"></i>
+                        <input type="text" id="order-customer-name" class="cart-input-field has-icon"
+                            placeholder="Enter your name" autocomplete="name" required
+                            aria-required="true" aria-describedby="name-error-msg">
+                    </div>
+                    <span class="input-error-msg" id="name-error-msg" style="display: none;">
+                        <i class="fas fa-circle-exclamation"></i> Please enter your name
+                    </span>
+                </div>
+
+                <div class="cart-input-wrap">
+                    <label class="cart-input-label" for="order-customer-phone">
+                        Mobile Number <span class="required-star">*</span>
+                    </label>
+                    <div class="cart-input-inner">
+                        <span class="input-prefix-tag">+91</span>
+                        <input type="tel" id="order-customer-phone" class="cart-input-field has-prefix"
+                            placeholder="10-digit mobile number" maxlength="10" inputmode="numeric" autocomplete="tel" required
+                            aria-required="true" aria-describedby="phone-error-msg">
+                    </div>
+                    <span class="input-error-msg" id="phone-error-msg" style="display: none;">
+                        <i class="fas fa-circle-exclamation"></i> Please enter a valid 10-digit mobile number
+                    </span>
+                </div>
+
+                <div class="cart-input-wrap">
+                    <label class="cart-input-label" for="order-collection-type">
+                        Order Preference
+                    </label>
+                    <div class="cart-input-inner">
+                        <i class="fas fa-location-dot input-icon" aria-hidden="true"></i>
+                        <select id="order-collection-type" class="cart-input-field has-icon" aria-label="Order Collection Method">
+                            <option value="Store Pickup at B-Camp, Kurnool">Store Pickup at B-Camp, Kurnool</option>
+                            <option value="Home Delivery Request (Kurnool Area)">Home Delivery Request (Kurnool Area)</option>
+                        </select>
+                    </div>
+                </div>
             </div>
 
             <!-- Disclaimer Notice -->

@@ -1110,9 +1110,66 @@
     }
 
     // ========== 7. WHATSAPP CHECKOUT LOGIC ==========
+    function validateCustomerName(rawName) {
+        if (!rawName) return false;
+        const trimmed = rawName.trim();
+        // At least 2 characters with letters
+        return trimmed.length >= 2 && /[a-zA-Z]/.test(trimmed);
+    }
+
+    function validateMobileNumber(rawPhone) {
+        if (!rawPhone) return { isValid: false, cleanNumber: '' };
+        let cleaned = String(rawPhone).replace(/[\s\-\(\)\.]/g, '');
+        if (cleaned.startsWith('+91') && cleaned.length === 13) {
+            cleaned = cleaned.substring(3);
+        } else if (cleaned.startsWith('91') && cleaned.length === 12) {
+            cleaned = cleaned.substring(2);
+        } else if (cleaned.startsWith('0') && cleaned.length === 11) {
+            cleaned = cleaned.substring(1);
+        }
+        // Valid Indian mobile: exactly 10 digits starting with 6, 7, 8, or 9
+        const isValid = /^[6-9]\d{9}$/.test(cleaned);
+        return { isValid, cleanNumber: cleaned };
+    }
+
     function setupCheckout() {
         const checkoutBtn = document.getElementById('checkout-whatsapp');
+        const nameInput = document.getElementById('order-customer-name');
+        const phoneInput = document.getElementById('order-customer-phone');
+        const collectionSelect = document.getElementById('order-collection-type');
+        const nameErrorEl = document.getElementById('name-error-msg');
+        const phoneErrorEl = document.getElementById('phone-error-msg');
+
         if (!checkoutBtn) return;
+
+        // Restore previously saved customer details for fast repeat ordering
+        try {
+            const savedName = localStorage.getItem('sst_saved_customer_name');
+            const savedPhone = localStorage.getItem('sst_saved_customer_phone');
+            if (savedName && nameInput && !nameInput.value) nameInput.value = savedName;
+            if (savedPhone && phoneInput && !phoneInput.value) phoneInput.value = savedPhone;
+        } catch (e) {}
+
+        // Real-time live validation listeners
+        if (nameInput) {
+            nameInput.addEventListener('input', () => {
+                if (validateCustomerName(nameInput.value)) {
+                    nameInput.classList.remove('input-invalid');
+                    if (nameErrorEl) nameErrorEl.style.display = 'none';
+                }
+            });
+        }
+
+        if (phoneInput) {
+            phoneInput.addEventListener('input', () => {
+                // Keep only numeric digits and max 10 digits
+                phoneInput.value = phoneInput.value.replace(/[^0-9]/g, '').slice(0, 10);
+                if (validateMobileNumber(phoneInput.value).isValid) {
+                    phoneInput.classList.remove('input-invalid');
+                    if (phoneErrorEl) phoneErrorEl.style.display = 'none';
+                }
+            });
+        }
 
         checkoutBtn.addEventListener('click', () => {
             if (cart.length === 0) {
@@ -1120,13 +1177,56 @@
                 return;
             }
 
-            const nameInput = document.getElementById('order-customer-name');
-            const phoneInput = document.getElementById('order-customer-phone');
-            const collectionSelect = document.getElementById('order-collection-type');
-
             const customerName = nameInput ? nameInput.value.trim() : '';
-            const customerPhone = phoneInput ? phoneInput.value.trim() : '';
+            const rawPhone = phoneInput ? phoneInput.value.trim() : '';
             const collectionMethod = collectionSelect ? collectionSelect.value : 'Store Pickup at B-Camp, Kurnool';
+
+            // Strict Validation: Name and Valid Mobile Number are REQUIRED
+            const isNameValid = validateCustomerName(customerName);
+            const phoneValidation = validateMobileNumber(rawPhone);
+            let hasError = false;
+
+            if (!isNameValid) {
+                hasError = true;
+                if (nameInput) {
+                    nameInput.classList.add('input-invalid');
+                    nameInput.focus();
+                }
+                if (nameErrorEl) nameErrorEl.style.display = 'flex';
+            } else {
+                if (nameInput) nameInput.classList.remove('input-invalid');
+                if (nameErrorEl) nameErrorEl.style.display = 'none';
+            }
+
+            if (!phoneValidation.isValid) {
+                if (!hasError && phoneInput) {
+                    phoneInput.focus();
+                }
+                hasError = true;
+                if (phoneInput) phoneInput.classList.add('input-invalid');
+                if (phoneErrorEl) phoneErrorEl.style.display = 'flex';
+            } else {
+                if (phoneInput) phoneInput.classList.remove('input-invalid');
+                if (phoneErrorEl) phoneErrorEl.style.display = 'none';
+            }
+
+            // Block checkout if either field is missing or invalid
+            if (hasError) {
+                if (!isNameValid && !phoneValidation.isValid) {
+                    showToast('⚠️ Please enter your name and a valid 10-digit mobile number.');
+                } else if (!isNameValid) {
+                    showToast('⚠️ Please enter your full name to proceed.');
+                } else {
+                    showToast('⚠️ Please enter a valid 10-digit mobile number.');
+                }
+                return;
+            }
+
+            // Save valid customer info for future checkouts
+            try {
+                localStorage.setItem('sst_saved_customer_name', customerName);
+                localStorage.setItem('sst_saved_customer_phone', phoneValidation.cleanNumber);
+            } catch (e) {}
 
             let fixedSubtotal = 0;
             const variableItems = [];
@@ -1162,22 +1262,20 @@
                 pricingSummary = `*Items Needing Price Confirmation:* ${variableItems.join(', ')}\n*Pricing:* To be confirmed by store on WhatsApp`;
             }
 
-            let customerBlock = '';
-            if (customerName || customerPhone) {
-                customerBlock = `*Customer Information:*\n` +
-                    (customerName ? `• Name: ${customerName}\n` : '') +
-                    (customerPhone ? `• Phone: ${customerPhone}\n` : '') +
-                    `\n`;
-            }
+            const customerBlock =
+                `*Customer Details:*\n` +
+                `👤 *Name:* ${customerName}\n` +
+                `📱 *Mobile:* +91 ${phoneValidation.cleanNumber}\n\n`;
 
             const message =
                 `🛒 *ORDER ENQUIRY — SRI SAI TRADERS*\n` +
                 `Dairy Farm & Kirana Store, Kurnool\n` +
                 `----------------------------------------\n` +
+                customerBlock +
+                `----------------------------------------\n` +
                 `${itemsText}\n` +
                 `----------------------------------------\n` +
                 `${pricingSummary}\n\n` +
-                customerBlock +
                 `*Order Preference:*\n` +
                 `📍 ${collectionMethod}\n` +
                 `----------------------------------------\n` +
