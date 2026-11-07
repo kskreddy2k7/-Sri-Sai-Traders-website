@@ -1,0 +1,10 @@
+category_id,category_name,is_active,sort_order
+CAT_DAIRY,Our Own Dairy,TRUE,1
+CAT_GRAINS,Rice & Grains,TRUE,2
+CAT_OILS,Oils,TRUE,3
+CAT_SPICES,Spices & Pastes,TRUE,4
+CAT_SNACKS,Snacks & Chocolates,TRUE,5
+CAT_DRINKS,Cool Drinks,TRUE,6
+CAT_ESSENTIALS,Daily Essentials,TRUE,7
+CAT_CLEANING,Home Cleaning,TRUE,8
+CAT_DISPOSABLE,Disposable & Packaging,TRUE,9

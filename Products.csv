@@ -1,0 +1,38 @@
+product_id,product_name,category,description,price,price_type,unit,image_url,stock_quantity,low_stock_threshold,is_active,is_featured,sort_order,updated_at
+SST-101,"Pure Buffalo Milk (Morning Fresh)","Our Own Dairy","100% pure raw buffalo milk collected at 6:00 AM from our Kurnool farm. Rich in natural cream and calcium.",60,fixed,"1 Litre","assets/milk.jpg",45,10,TRUE,TRUE,10,2026-11-07
+SST-102,"Country Buffalo Curd (Thick Dahi)","Our Own Dairy","Traditional creamy buffalo dahi set naturally without preservatives or starch.",70,fixed,"1 Litre","assets/dairy3.jpg",20,5,TRUE,TRUE,20,2026-11-07
+SST-103,"Traditional Buffalo Ghee (Danedar)","Our Own Dairy","Aromatic slow-churned farm ghee with authentic golden grain texture and rich aroma.",750,fixed,"1 Litre","assets/dairy5.jpg",8,3,TRUE,TRUE,30,2026-11-07
+SST-104,"Fresh Buffalo Paneer","Our Own Dairy","Soft cottage cheese made daily on order from farm buffalo milk.",120,fixed,"250g","assets/dairy1.jpg",0,4,TRUE,FALSE,40,2026-11-07
+SST-201,"Sona Masoori Raw Rice (Aged)","Rice & Grains","Premium aged lightweight rice sourced from regional Andhra paddy mills.",1450,variable,"25 Kg Bag","assets/grocery.jpg",14,4,TRUE,TRUE,10,2026-11-07
+SST-202,"Sona Masoori Raw Rice (Pack)","Rice & Grains","Convenient 5kg pack of aged Sona Masoori rice for everyday family cooking.",310,fixed,"5 Kg Bag","assets/grocery.jpg",25,5,TRUE,FALSE,20,2026-11-07
+SST-203,"Royal Biryani Basmati Rice","Rice & Grains","Extra-long grain aromatic Basmati rice ideal for family biryanis and pulao.",140,fixed,"1 Kg","assets/grocery.jpg",18,5,TRUE,FALSE,30,2026-11-07
+SST-204,"Premium Toor Dal (Kandi Pappu)","Rice & Grains","Unpolished protein-rich yellow pigeon peas for authentic Andhra sambar and pappu.",165,fixed,"1 Kg","assets/grocery.jpg",30,8,TRUE,TRUE,40,2026-11-07
+SST-205,"Yellow Moong Dal (Pesara Pappu)","Rice & Grains","Clean split yellow lentils, quick to cook and light on digestion.",125,fixed,"1 Kg","assets/grocery.jpg",22,5,TRUE,FALSE,50,2026-11-07
+SST-206,"Chakki Whole Wheat Atta","Rice & Grains","100% whole grain stone-ground wheat flour for soft, nutritious rotis.",240,fixed,"5 Kg","assets/grocery.jpg",12,3,TRUE,FALSE,60,2026-11-07
+SST-301,"Pure Cold-Pressed Groundnut Oil","Oils","Authentic wood-pressed groundnut cooking oil with natural nutty aroma.",180,fixed,"1 Litre Pouch","assets/grocery.jpg",18,4,TRUE,TRUE,10,2026-11-07
+SST-302,"Freedom Refined Sunflower Oil","Oils","Triple refined cooking oil fortified with Vitamins A & D.",135,fixed,"1 Litre Pouch","assets/grocery.jpg",40,10,TRUE,TRUE,20,2026-11-07
+SST-303,"Freedom Sunflower Oil Can","Oils","Bulk 5-litre family savings can of refined sunflower cooking oil.",670,fixed,"5 Litre Can","assets/grocery.jpg",9,2,TRUE,FALSE,30,2026-11-07
+SST-401,"Guntur Red Chilli Powder","Spices & Pastes","Bright red, spicy ground chilli powder from Guntur farms, perfect for Andhra curries.",110,fixed,"500g Pack","assets/grocery.jpg",26,6,TRUE,TRUE,10,2026-11-07
+SST-402,"Pure Salem Turmeric Powder (Haldi)","Spices & Pastes","High-curcumin aromatic golden turmeric powder for daily health and cooking.",55,fixed,"250g Pack","assets/grocery.jpg",32,8,TRUE,FALSE,20,2026-11-07
+SST-403,"Home-Style Ginger Garlic Paste","Spices & Pastes","Thick and aromatic ginger-garlic blend for curries and biryani bases.",45,fixed,"200g Pouch","assets/grocery.jpg",19,5,TRUE,FALSE,30,2026-11-07
+SST-404,"Roasted Coriander Powder (Dhaniya)","Spices & Pastes","Slow-roasted coriander seeds ground to fragrant perfection.",50,fixed,"250g Pack","assets/grocery.jpg",22,5,TRUE,FALSE,40,2026-11-07
+SST-501,"Cadbury Dairy Milk Silk","Snacks & Chocolates","Rich, smooth and creamy classic milk chocolate bar.",85,fixed,"60g Bar","assets/shop front.jpeg",35,8,TRUE,TRUE,10,2026-11-07
+SST-502,"Britannia Good Day Butter Cookies","Snacks & Chocolates","Crunchy butter cookies with the signature cashew and butter richness.",30,fixed,"200g Pack","assets/shop front.jpeg",48,12,TRUE,FALSE,20,2026-11-07
+SST-503,"Haldiram's Aloo Bhujia Namkeen","Snacks & Chocolates","Crispy spicy potato and gram flour tea-time Indian snack.",55,fixed,"200g Pack","assets/shop front.jpeg",24,6,TRUE,TRUE,30,2026-11-07
+SST-504,"Lay's India's Magic Masala Chips","Snacks & Chocolates","Crispy ridged potato chips seasoned with authentic Indian spices.",20,fixed,"50g Pack","assets/shop front.jpeg",36,10,TRUE,FALSE,40,2026-11-07
+SST-601,"Thums Up Chilled Pet Bottle","Cool Drinks","Strong, fizzy cola beverage served chilled from our store refrigerator.",40,fixed,"750 ml","assets/cool-drinks.jpeg",28,6,TRUE,TRUE,10,2026-11-07
+SST-602,"Sprite Chilled Pet Bottle","Cool Drinks","Crisp, refreshing lemon-lime fizzy soda served chilled.",40,fixed,"750 ml","assets/cool-drinks.jpeg",24,6,TRUE,FALSE,20,2026-11-07
+SST-603,"Maaza Mango Drink","Cool Drinks","Rich Alphonso mango fruit juice beverage for all ages.",38,fixed,"600 ml","assets/cool-drinks.jpeg",30,6,TRUE,TRUE,30,2026-11-07
+SST-604,"Coca-Cola Party Bottle","Cool Drinks","Large family party bottle of classic Coca-Cola.",95,fixed,"2.25 Litre","assets/cool-drinks.jpeg",15,4,TRUE,FALSE,40,2026-11-07
+SST-605,"Kinley Chilled Club Soda","Cool Drinks","Extra-fizzy chilled carbonated table water.",20,fixed,"750 ml","assets/cool-drinks.jpeg",35,8,TRUE,FALSE,50,2026-11-07
+SST-701,"Tata Salt Vacuum Evaporated","Daily Essentials","Iodized crystal-pure vacuum-evaporated table salt for every kitchen.",28,fixed,"1 Kg Pouch","assets/grocery.jpg",50,12,TRUE,TRUE,10,2026-11-07
+SST-702,"Pure Refined White Sugar","Daily Essentials","Clean sulfur-free sparkling sugar crystals for tea, coffee, and sweets.",44,fixed,"1 Kg","assets/grocery.jpg",42,10,TRUE,FALSE,20,2026-11-07
+SST-703,"Red Label Strong Leaf Tea","Daily Essentials","High-quality CTC black tea blend for rich morning taste and strength.",130,fixed,"250g Pack","assets/grocery.jpg",26,6,TRUE,TRUE,30,2026-11-07
+SST-704,"Bru Instant Coffee Powder","Daily Essentials","Fine blend of roasted coffee and chicory for aromatic south Indian filter-style coffee.",95,fixed,"100g Pouch","assets/grocery.jpg",20,5,TRUE,FALSE,40,2026-11-07
+SST-801,"Surf Excel Quick Wash Detergent Powder","Home Cleaning","Premium stain-removing washing powder with fresh floral fragrance.",140,fixed,"1 Kg Pack","assets/grocery.jpg",25,6,TRUE,TRUE,10,2026-11-07
+SST-802,"Rin Advanced Detergent Bar","Home Cleaning","Value pack of detergent bars for bright whites and fabric care.",40,fixed,"Pack of 4 Bars","assets/grocery.jpg",32,8,TRUE,FALSE,20,2026-11-07
+SST-803,"Vim Dishwash Lemon Gel","Home Cleaning","Powerful grease-cutting dishwashing liquid with real lemon juice.",105,fixed,"500 ml Bottle","assets/grocery.jpg",18,4,TRUE,FALSE,30,2026-11-07
+SST-804,"Lizol Pine Disinfectant Floor Cleaner","Home Cleaning","Triple action floor disinfectant killing 99.9% germs with pleasant pine aroma.",98,fixed,"500 ml Bottle","assets/grocery.jpg",16,4,TRUE,FALSE,40,2026-11-07
+SST-901,"Eco Silver Meal Plates (Buffet)","Disposable & Packaging","Heavyweight laminated silver paper plates for family functions, catering & parties.",85,fixed,"Pack of 50","assets/paper-plates.jpeg",35,8,TRUE,TRUE,10,2026-11-07
+SST-902,"Wholesale Carry Bags & Covers","Disposable & Packaging","Government approved standard biodegradable retail grocery carry bags for shops.",,on_request,"1 Kg Pack","assets/carry-bags.jpeg",20,5,TRUE,FALSE,20,2026-11-07
+SST-903,"Paper Tea & Water Cups","Disposable & Packaging","Food-grade leak-proof disposable paper cups for hot chai and cool drinks.",65,fixed,"Pack of 100","assets/paper-plates.jpeg",40,10,TRUE,FALSE,30,2026-11-07

@@ -1,0 +1,10 @@
+key,value,description
+business_name,Sri Sai Traders,Official brand name displayed across the site
+whatsapp_number,918639602820,Target WhatsApp recipient for cart checkouts
+phone_secondary,919440240677,Fallback store contact line
+store_address,"Vijaya Durga College Road, B-Camp, Kurnool, AP 518002",Store pickup location injected into WhatsApp notes
+currency_symbol,₹,Display currency prefix
+currency_code,INR,Official currency code
+low_stock_default,5,Global fallback threshold when threshold is blank
+business_hours,6:00 AM – 9:00 PM Daily,Store operational window
+delivery_available,TRUE,Whether Kurnool local delivery option is enabled

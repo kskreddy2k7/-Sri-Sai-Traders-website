@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Order farm-fresh buffalo milk, curd, groceries, cooking oils, cool drinks, and disposables online from Sri Sai Traders, Kurnool. Fast WhatsApp checkout & store pickup.">
+    <meta name="keywords"
+        content="Sri Sai Traders, Kirana Store Kurnool, Buffalo Milk Kurnool, Online Grocery Kurnool, WhatsApp Grocery Kurnool, Cooking Oils, B-Camp Store">
+    <meta name="author" content="Sri Sai Traders">
+    <meta name="theme-color" content="#3E1F0E">
+
+    <!-- Open Graph / Meta -->
+    <meta property="og:title" content="Online Kirana &amp; Buffalo Dairy Store | Sri Sai Traders, Kurnool">
+    <meta property="og:description"
+        content="Order pure buffalo milk, curd, rice, cooking oils, snacks, and daily essentials easily via WhatsApp from Sri Sai Traders, Kurnool.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="assets/srisaitraderskurnoollogo.jpeg">
+
+    <title>Kirana Shop &amp; Dairy Ordering • Sri Sai Traders, Kurnool</title>
+
+    <!-- Google Fonts & Font Awesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Dedicated E-Commerce Stylesheet -->
+    <link rel="stylesheet" href="shop.css">
+</head>
+
+<body class="shop-body">
+
+    <!-- ==========================================================================
+       1. DEDICATED SHOP HEADER
+       ========================================================================== -->
+    <header class="shop-header" role="banner">
+        <div class="shop-header-container">
+            <!-- Brand Info -->
+            <a href="index.html" class="shop-brand" aria-label="Sri Sai Traders Home">
+                <img src="assets/srisaitraderskurnoollogo.jpeg" alt="Sri Sai Traders Emblem" class="shop-brand-logo" width="44" height="44">
+                <div class="shop-brand-text">
+                    <span class="shop-brand-title">Sri Sai Traders</span>
+                    <span class="shop-brand-sub">Dairy Farm &amp; Kirana • Kurnool</span>
+                </div>
+            </a>
+
+            <!-- Compact Header Search (for wider screens) -->
+            <div class="shop-header-search" role="search">
+                <div class="shop-header-search-inner">
+                    <i class="fas fa-search shop-header-search-icon" aria-hidden="true"></i>
+                    <input type="text" id="header-search-input" class="shop-header-search-input"
+                        placeholder="Search milk, rice, oils, snacks..." aria-label="Quick search products">
+                    <button id="header-search-clear" class="shop-header-search-clear hide" aria-label="Clear quick search">
+                        <i class="fas fa-xmark"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Header Actions -->
+            <div class="shop-header-actions">
+                <a href="index.html" class="shop-back-home-btn" title="Return to Homepage">
+                    <i class="fas fa-arrow-left"></i> <span>Home</span>
+                </a>
+
+                <!-- Shopping Cart Trigger Button -->
+                <button id="header-cart-btn" class="shop-header-cart-btn" aria-label="View Shopping Cart" title="View Cart">
+                    <div class="shop-header-cart-icon-wrap">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span class="shop-header-cart-count" id="header-cart-count">0</span>
+                    </div>
+                    <span class="shop-header-cart-total" id="header-cart-total">₹0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==========================================================================
+       2. SHOP HERO & PROMINENT SEARCH
+       ========================================================================== -->
+    <section class="shop-hero-section">
+        <div class="shop-hero-container">
+            <div class="shop-hero-badge">
+                <i class="fas fa-store"></i> SRI SAI TRADERS • B-CAMP, KURNOOL
+            </div>
+            <h1 class="shop-hero-heading">Your Everyday Essentials, Just a Click Away</h1>
+            <p class="shop-hero-desc">
+                Fresh buffalo dairy, groceries and household essentials from Sri Sai Traders.
+            </p>
+
+            <!-- Large Hero Search Bar -->
+            <div class="shop-hero-search-card" role="search">
+                <i class="fas fa-search shop-hero-search-icon" aria-hidden="true"></i>
+                <input type="text" id="shop-search-input" class="shop-hero-search-input"
+                    placeholder="Search milk, curd, rice, cooking oil, spices, snacks..." aria-label="Search all products">
+                <button id="shop-search-clear" class="shop-search-clear-btn hide" aria-label="Clear search query" title="Clear search">
+                    <i class="fas fa-xmark"></i>
+                </button>
+                <button id="shop-search-submit" class="shop-search-submit-btn" aria-label="Submit search">
+                    <i class="fas fa-magnifying-glass"></i> <span>Search</span>
+                </button>
+            </div>
+
+            <!-- Popular Search Suggestions / Quick Chips -->
+            <div class="shop-search-suggestions">
+                <span class="suggestion-label"><i class="fas fa-fire"></i> Popular:</span>
+                <button class="suggestion-chip" data-search="Fresh Buffalo Milk">Fresh Buffalo Milk</button>
+                <button class="suggestion-chip" data-search="Sona Masoori Rice">Sona Masoori Rice</button>
+                <button class="suggestion-chip" data-search="Freedom Oil">Freedom Oil</button>
+                <button class="suggestion-chip" data-search="Pure Ghee">Pure Ghee</button>
+                <button class="suggestion-chip" data-search="Surf Excel">Surf Excel</button>
+                <button class="suggestion-chip" data-search="Red Label Tea">Red Label Tea</button>
+            </div>
+
+            <!-- Value Highlights Strip -->
+            <div class="shop-hero-trust-strip">
+                <div class="trust-item"><i class="fas fa-cow"></i> 100% Buffalo Milk</div>
+                <div class="trust-item"><i class="fas fa-basket-shopping"></i> Authentic Kirana</div>
+                <div class="trust-item"><i class="fab fa-whatsapp"></i> Instant WhatsApp Checkout</div>
+                <div class="trust-item"><i class="fas fa-location-dot"></i> B-Camp Store Pickup</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================================================
+       3. HORIZONTALLY SCROLLABLE CATEGORY NAVIGATION
+       ========================================================================== -->
+    <nav class="shop-categories-wrapper" aria-label="Product Categories">
+        <div class="shop-categories-container">
+            <button class="cat-scroll-arrow left" id="cat-scroll-left" aria-label="Scroll categories left">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+
+            <div class="shop-categories-track" id="shop-categories-track">
+                <!-- 1. All Items -->
+                <button class="cat-chip active" data-category="All">
+                    <i class="fas fa-store cat-icon"></i>
+                    <span class="cat-name">All Items</span>
+                    <span class="cat-count" id="cat-count-all">...</span>
+                </button>
+                <!-- 2. Our Own Dairy -->
+                <button class="cat-chip" data-category="Our Own Dairy">
+                    <i class="fas fa-cow cat-icon"></i>
+                    <span class="cat-name">Our Own Dairy</span>
+                    <span class="cat-count" id="cat-count-dairy">...</span>
+                </button>
+                <!-- 3. Rice & Grains -->
+                <button class="cat-chip" data-category="Rice & Grains">
+                    <i class="fas fa-wheat-awn cat-icon"></i>
+                    <span class="cat-name">Rice &amp; Grains</span>
+                    <span class="cat-count" id="cat-count-grains">...</span>
+                </button>
+                <!-- 4. Oils -->
+                <button class="cat-chip" data-category="Oils">
+                    <i class="fas fa-oil-can cat-icon"></i>
+                    <span class="cat-name">Oils</span>
+                    <span class="cat-count" id="cat-count-oils">...</span>
+                </button>
+                <!-- 5. Spices & Pastes -->
+                <button class="cat-chip" data-category="Spices & Pastes">
+                    <i class="fas fa-pepper-hot cat-icon"></i>
+                    <span class="cat-name">Spices &amp; Pastes</span>
+                    <span class="cat-count" id="cat-count-spices">...</span>
+                </button>
+                <!-- 6. Snacks & Chocolates -->
+                <button class="cat-chip" data-category="Snacks & Chocolates">
+                    <i class="fas fa-cookie-bite cat-icon"></i>
+                    <span class="cat-name">Snacks &amp; Chocolates</span>
+                    <span class="cat-count" id="cat-count-snacks">...</span>
+                </button>
+                <!-- 7. Cool Drinks -->
+                <button class="cat-chip" data-category="Cool Drinks">
+                    <i class="fas fa-bottle-water cat-icon"></i>
+                    <span class="cat-name">Cool Drinks</span>
+                    <span class="cat-count" id="cat-count-drinks">...</span>
+                </button>
+                <!-- 8. Daily Essentials -->
+                <button class="cat-chip" data-category="Daily Essentials">
+                    <i class="fas fa-basket-shopping cat-icon"></i>
+                    <span class="cat-name">Daily Essentials</span>
+                    <span class="cat-count" id="cat-count-essentials">...</span>
+                </button>
+                <!-- 9. Home Cleaning -->
+                <button class="cat-chip" data-category="Home Cleaning">
+                    <i class="fas fa-spray-can-sparkles cat-icon"></i>
+                    <span class="cat-name">Home Cleaning</span>
+                    <span class="cat-count" id="cat-count-cleaning">...</span>
+                </button>
+                <!-- 10. Disposable & Packaging -->
+                <button class="cat-chip" data-category="Disposable & Packaging">
+                    <i class="fas fa-boxes-packing cat-icon"></i>
+                    <span class="cat-name">Disposable &amp; Packaging</span>
+                    <span class="cat-count" id="cat-count-disposable">...</span>
+                </button>
+            </div>
+
+            <button class="cat-scroll-arrow right" id="cat-scroll-right" aria-label="Scroll categories right">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ==========================================================================
+       4. MAIN PRODUCT CATALOG AREA
+       ========================================================================== -->
+    <main class="shop-main-layout">
+        <!-- Toolbar: Active Category, Count, In-Stock Filter, Sorting -->
+        <div class="shop-toolbar">
+            <div class="toolbar-left">
+                <h2 class="active-cat-title" id="active-category-title">All Items</h2>
+                <span class="product-count-badge" id="product-count-label">Loading products...</span>
+                <span class="sync-status-indicator" id="sync-status" title="Data Synchronization Status">
+                    <span class="sync-dot"></span> <span id="sync-status-text">Connected</span>
+                </span>
+            </div>
+
+            <div class="toolbar-right">
+                <!-- In Stock Only Filter -->
+                <button class="stock-filter-toggle" id="in-stock-filter-toggle" aria-pressed="false" title="Show in-stock items only">
+                    <i class="fas fa-circle-check"></i> In Stock Only
+                </button>
+
+                <!-- Sorting Dropdown -->
+                <div class="sort-wrap">
+                    <i class="fas fa-arrow-down-short-wide sort-icon" aria-hidden="true"></i>
+                    <select id="shop-sort-select" class="sort-select" aria-label="Sort products">
+                        <option value="featured">Popular First</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="name-az">Name: A to Z</option>
+                        <option value="newest">Newest First</option>
+                    </select>
+                    <i class="fas fa-chevron-down sort-chevron" aria-hidden="true"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Cards Grid -->
+        <div class="shop-product-grid" id="shop-product-grid" aria-live="polite">
+            <!-- Dynamic product cards populated via shop.js -->
+        </div>
+
+        <!-- Custom Grocery Order Banner -->
+        <div class="custom-order-banner">
+            <div class="custom-banner-text">
+                <span class="custom-banner-tag"><i class="fab fa-whatsapp"></i> CUSTOM &amp; HANDWRITTEN LISTS</span>
+                <h3 class="custom-banner-title">Need groceries not listed on this page?</h3>
+                <p class="custom-banner-desc">
+                    We stock hundreds of everyday items at our Kurnool kirana store. Write down your grocery list on paper or message us directly on WhatsApp!
+                </p>
+            </div>
+            <a href="https://wa.me/918639602820?text=Hi%20Sri%20Sai%20Traders,%20I%20would%20like%20to%20order%20the%20following%20kirana%20items:%0A1.%20%0A2.%20%0A3.%20"
+                target="_blank" rel="noopener noreferrer" class="btn-custom-wa">
+                <i class="fab fa-whatsapp"></i> Send Grocery List on WhatsApp
+            </a>
+        </div>
+    </main>
+
+    <!-- ==========================================================================
+       5. CART DRAWER & BACKDROP
+       ========================================================================== -->
+    <div id="cart-backdrop" class="cart-backdrop" aria-hidden="true"></div>
+
+    <aside id="cart-sidebar" class="cart-sidebar" aria-label="Shopping Cart Drawer" aria-hidden="true" role="dialog">
+        <!-- Header -->
+        <div class="cart-header">
+            <div class="cart-header-title">
+                <i class="fas fa-shopping-bag"></i>
+                <h3>Shopping Cart</h3>
+                <span class="cart-header-badge" id="cart-drawer-count">0 items</span>
+            </div>
+            <button class="close-cart-btn" id="close-cart-btn" aria-label="Close Shopping Cart">&times;</button>
+        </div>
+
+        <!-- Items Container -->
+        <div class="cart-items-wrap" id="cart-items-container">
+            <!-- Rendered by shop.js -->
+        </div>
+
+        <!-- Footer / Checkout -->
+        <div class="cart-footer">
+            <div class="cart-summary-card">
+                <div class="summary-line">
+                    <span>Total Items:</span>
+                    <strong id="cart-total-count">0</strong>
+                </div>
+                <div class="summary-line" id="cart-subtotal-row">
+                    <span id="cart-subtotal-label">Subtotal:</span>
+                    <strong id="cart-subtotal-display">₹0</strong>
+                </div>
+                <div class="summary-line hide" id="cart-confirmation-row">
+                    <span>Price on Confirmation:</span>
+                    <span class="summary-confirmation-tag" id="cart-confirmation-badge">0 item(s)</span>
+                </div>
+                <div class="summary-line highlight">
+                    <span id="cart-total-label">Estimated Total:</span>
+                    <strong id="cart-total-display">₹0</strong>
+                </div>
+            </div>
+
+            <!-- Customer Details Form -->
+            <div class="cart-inputs-group">
+                <input type="text" id="order-customer-name" class="cart-input-field"
+                    placeholder="Your Name (Optional)" aria-label="Customer Name">
+                <input type="tel" id="order-customer-phone" class="cart-input-field"
+                    placeholder="Mobile Number (Optional)" aria-label="Customer Phone Number">
+                <select id="order-collection-type" class="cart-input-field" aria-label="Order Collection Method">
+                    <option value="Store Pickup at B-Camp, Kurnool">Store Pickup at B-Camp, Kurnool</option>
+                    <option value="Home Delivery Request (Kurnool Area)">Home Delivery Request (Kurnool Area)</option>
+                </select>
+            </div>
+
+            <!-- Disclaimer Notice -->
+            <div class="cart-disclaimer-box">
+                <i class="fas fa-info-circle"></i>
+                <span>Submitting sends an order enquiry. Sri Sai Traders will check live stock and reply on WhatsApp to confirm your order. No payment or stock deduction has occurred.</span>
+            </div>
+
+            <!-- Checkout Button -->
+            <button id="checkout-whatsapp" class="btn-checkout-wa">
+                <i class="fab fa-whatsapp"></i> Send Order via WhatsApp
+            </button>
+
+            <!-- Auxiliary Controls -->
+            <div class="cart-bottom-aux">
+                <button id="clear-cart-btn" class="btn-clear-cart-text">
+                    <i class="fas fa-trash-can"></i> Clear Cart
+                </button>
+                <p class="wa-number-note">
+                    <i class="fas fa-shield-alt"></i> WhatsApp: +91 8639602820
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ==========================================================================
+       6. INSTAMART-STYLE STICKY BOTTOM CART BAR
+       ========================================================================== -->
+    <div id="sticky-cart-bar" class="sticky-cart-bar" aria-hidden="true">
+        <div class="sticky-cart-info">
+            <div class="sticky-cart-bag-icon">
+                <i class="fas fa-shopping-bag"></i>
+            </div>
+            <div class="sticky-cart-text-wrap">
+                <span class="sticky-cart-count-line" id="sticky-cart-title">0 Items Added</span>
+                <span class="sticky-cart-sub-line" id="sticky-cart-sub">Tap to view your items</span>
+            </div>
+        </div>
+        <button id="sticky-cart-checkout-btn" class="btn-sticky-checkout">
+            <span>View Cart</span> <i class="fas fa-arrow-right"></i>
+        </button>
+    </div>
+
+    <!-- ==========================================================================
+       7. QUICK VIEW MODAL
+       ========================================================================== -->
+    <div id="quick-view-modal" class="shop-modal-backdrop" aria-hidden="true" role="dialog">
+        <div class="shop-modal-card">
+            <button class="modal-close-btn" id="modal-close-btn" aria-label="Close modal">&times;</button>
+            <div class="modal-content-grid">
+                <div class="modal-img-wrap">
+                    <img id="modal-img" src="" alt="Product Image">
+                </div>
+                <div class="modal-details-wrap">
+                    <span class="modal-cat-tag" id="modal-category"></span>
+                    <h3 class="modal-product-title" id="modal-title"></h3>
+                    <div class="modal-unit-tag" id="modal-unit"></div>
+                    <div class="modal-price-line" id="modal-price"></div>
+                    <div class="modal-stock-tag" id="modal-stock"></div>
+                    <p class="modal-desc-text" id="modal-desc"></p>
+                    <div class="modal-actions-row" id="modal-actions">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================================================
+       8. TOAST NOTIFICATIONS CONTAINER
+       ========================================================================== -->
+    <div class="shop-toast-container" id="toast-container" aria-live="polite"></div>
+
+    <!-- ==========================================================================
+       9. FOOTER
+       ========================================================================== -->
+    <footer class="shop-footer">
+        <div class="shop-footer-container">
+            <div class="shop-footer-brand">
+                <h3>Sri Sai Traders</h3>
+                <p>
+                    Farm-fresh buffalo milk, daily groceries, and kitchen essentials in Kurnool. Over 10 years of family dedication to purity, fair pricing, and neighborhood trust.
+                </p>
+                <p style="color: var(--sst-gold); font-weight: 600; font-size: 0.85rem;">
+                    <i class="fas fa-clock"></i> Open 7 Days: 6:00 AM – 9:00 PM
+                </p>
+            </div>
+
+            <div class="shop-footer-col">
+                <h4>Navigation</h4>
+                <ul class="shop-footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="index.html#about">About Us</a></li>
+                    <li><a href="index.html#dairy-farm">Dairy Farm</a></li>
+                    <li><a href="index.html#gallery">Our Store</a></li>
+                    <li><a href="index.html#why-us">Why Us</a></li>
+                    <li><a href="index.html#contact">Contact</a></li>
+                </ul>
+            </div>
+
+            <div class="shop-footer-col">
+                <h4>Categories</h4>
+                <ul class="shop-footer-links">
+                    <li><a href="javascript:void(0)" onclick="window.selectCategory('Our Own Dairy')">Our Own Dairy</a></li>
+                    <li><a href="javascript:void(0)" onclick="window.selectCategory('Rice & Grains')">Rice &amp; Grains</a></li>
+                    <li><a href="javascript:void(0)" onclick="window.selectCategory('Oils')">Cooking Oils</a></li>
+                    <li><a href="javascript:void(0)" onclick="window.selectCategory('Spices & Pastes')">Spices &amp; Pastes</a></li>
+                    <li><a href="javascript:void(0)" onclick="window.selectCategory('Snacks & Chocolates')">Snacks &amp; Sweets</a></li>
+                    <li><a href="javascript:void(0)" onclick="window.selectCategory('Cool Drinks')">Cool Drinks</a></li>
+                </ul>
+            </div>
+
+            <div class="shop-footer-col shop-footer-contact">
+                <h4>Store Location</h4>
+                <p><i class="fas fa-map-marker-alt"></i> Vijaya Durga College Road, B-Camp, Kurnool, AP 518002</p>
+                <p><a href="tel:8639602820"><i class="fas fa-phone"></i> +91 8639602820</a></p>
+                <p><a href="tel:9440240677"><i class="fas fa-phone"></i> +91 9440240677</a></p>
+                <p><a href="https://wa.me/918639602820" target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp"></i> Chat on WhatsApp</a></p>
+            </div>
+        </div>
+
+        <div class="shop-footer-bottom">
+            <p>&copy; 2026 Sri Sai Traders, Kurnool. All Rights Reserved. Pure Dairy &amp; Kirana Store.</p>
+        </div>
+    </footer>
+
+    <!-- Dedicated E-Commerce Script -->
+    <script src="shop.js"></script>
+</body>
+
+</html>
