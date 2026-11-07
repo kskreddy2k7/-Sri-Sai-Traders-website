@@ -656,41 +656,6 @@ body.shop-body {
     border: 1px solid var(--sst-border-subtle);
 }
 
-.sync-status-indicator {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.76rem;
-    color: var(--sst-green);
-    font-weight: 600;
-}
-
-.sync-dot {
-    width: 7px;
-    height: 7px;
-    background: var(--sst-green);
-    border-radius: 50%;
-    display: inline-block;
-    animation: syncPulse 2s infinite;
-}
-
-@keyframes syncPulse {
-    0% {
-        transform: scale(0.95);
-        opacity: 0.7;
-    }
-
-    50% {
-        transform: scale(1.2);
-        opacity: 1;
-    }
-
-    100% {
-        transform: scale(0.95);
-        opacity: 0.7;
-    }
-}
-
 .toolbar-right {
     display: flex;
     align-items: center;
@@ -1190,6 +1155,193 @@ body.shop-body {
 
 .btn-empty-wa:hover {
     background: #1EBE5D;
+}
+
+/* Late Loading Animation (Gracefully shows if network is slow) */
+.shop-late-loader {
+    width: 100%;
+    margin-bottom: 20px;
+    animation: lateFadeIn 0.35s ease-out forwards;
+    transition: opacity 0.3s ease, transform 0.3s ease, max-height 0.3s ease;
+}
+
+.shop-late-loader.fade-out {
+    opacity: 0;
+    transform: translateY(-8px);
+    pointer-events: none;
+}
+
+.late-loader-card {
+    background: linear-gradient(135deg, #FFFFFF 0%, #FAF7F0 100%);
+    border: 1.5px solid rgba(212, 162, 74, 0.35);
+    border-radius: var(--sst-radius-xl);
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 4px 18px rgba(62, 31, 14, 0.06);
+    position: relative;
+    overflow: hidden;
+}
+
+.late-loader-graphic {
+    position: relative;
+    flex-shrink: 0;
+    width: 54px;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.late-loader-icon-circle {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #3E1F0E 0%, #754522 100%);
+    color: #FAF7F0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 4px 12px rgba(62, 31, 14, 0.2);
+}
+
+.late-loader-icon {
+    animation: basketBounce 1.8s infinite ease-in-out;
+}
+
+@keyframes basketBounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-3px) scale(1.05);
+    }
+}
+
+.pulse-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 50px;
+    height: 50px;
+    margin-top: -25px;
+    margin-left: -25px;
+    border-radius: 50%;
+    border: 2px solid var(--sst-gold);
+    pointer-events: none;
+    z-index: 1;
+    animation: latePulseRing 2s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+.pulse-ring.ring-2 {
+    animation-delay: 0.75s;
+}
+
+@keyframes latePulseRing {
+    0% {
+        transform: scale(0.9);
+        opacity: 0.8;
+    }
+    60% {
+        transform: scale(1.45);
+        opacity: 0.25;
+    }
+    100% {
+        transform: scale(1.9);
+        opacity: 0;
+    }
+}
+
+.late-loader-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.late-loader-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--sst-chocolate);
+    margin-bottom: 4px;
+    letter-spacing: -0.2px;
+}
+
+.late-loader-desc {
+    font-size: 0.82rem;
+    color: var(--sst-warm-brown);
+    margin-bottom: 10px;
+    font-weight: 500;
+    line-height: 1.35;
+}
+
+.late-loader-track {
+    width: 100%;
+    max-width: 320px;
+    height: 4px;
+    background: #EFE9DF;
+    border-radius: var(--sst-radius-pill);
+    overflow: hidden;
+    position: relative;
+}
+
+.late-loader-bar {
+    width: 45%;
+    height: 100%;
+    background: linear-gradient(90deg, var(--sst-warm-brown) 0%, var(--sst-gold) 100%);
+    border-radius: var(--sst-radius-pill);
+    position: absolute;
+    animation: lateBarSlide 1.6s infinite ease-in-out;
+}
+
+@keyframes lateBarSlide {
+    0% {
+        left: -45%;
+    }
+    100% {
+        left: 105%;
+    }
+}
+
+@keyframes lateFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 576px) {
+    .late-loader-card {
+        padding: 16px;
+        gap: 14px;
+    }
+    .late-loader-graphic {
+        width: 44px;
+        height: 44px;
+    }
+    .late-loader-icon-circle {
+        width: 42px;
+        height: 42px;
+        font-size: 1.05rem;
+    }
+    .pulse-ring {
+        width: 42px;
+        height: 42px;
+        margin-top: -21px;
+        margin-left: -21px;
+    }
+    .late-loader-title {
+        font-size: 0.92rem;
+    }
+    .late-loader-desc {
+        font-size: 0.78rem;
+    }
 }
 
 /* Skeletons */

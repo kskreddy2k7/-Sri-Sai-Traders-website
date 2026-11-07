@@ -212,9 +212,6 @@
             <div class="toolbar-left">
                 <h2 class="active-cat-title" id="active-category-title">All Items</h2>
                 <span class="product-count-badge" id="product-count-label">Loading products...</span>
-                <span class="sync-status-indicator" id="sync-status" title="Data Synchronization Status">
-                    <span class="sync-dot"></span> <span id="sync-status-text">Connected</span>
-                </span>
             </div>
 
             <div class="toolbar-right">
@@ -234,6 +231,26 @@
                         <option value="newest">Newest First</option>
                     </select>
                     <i class="fas fa-chevron-down sort-chevron" aria-hidden="true"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Late Loading Animation (Gracefully appears only if network connection is slow) -->
+        <div class="shop-late-loader" id="shop-late-loader" aria-live="polite" style="display: none;">
+            <div class="late-loader-card">
+                <div class="late-loader-graphic">
+                    <div class="late-loader-icon-circle">
+                        <i class="fas fa-basket-shopping late-loader-icon"></i>
+                        <span class="pulse-ring ring-1"></span>
+                        <span class="pulse-ring ring-2"></span>
+                    </div>
+                </div>
+                <div class="late-loader-info">
+                    <h3 class="late-loader-title">Getting Your Store Ready...</h3>
+                    <p class="late-loader-desc" id="late-loader-desc">Loading farm-fresh milk &amp; everyday kirana essentials</p>
+                    <div class="late-loader-track">
+                        <div class="late-loader-bar"></div>
+                    </div>
                 </div>
             </div>
         </div>

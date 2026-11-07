@@ -128,8 +128,8 @@
                           trimmed.match(/fileId=([a-zA-Z0-9_-]+)/);
             if (match && match[1]) {
                 const fileId = match[1];
-                // Google UserContent CDN (Fastest, unthrottled, zero cookie restrictions)
-                return `https://lh3.googleusercontent.com/d/${fileId}=w1000`;
+                // Google UserContent CDN (Fastest, unthrottled, zero cookie restrictions, optimized image size)
+                return `https://lh3.googleusercontent.com/d/${fileId}=w600`;
             }
         }
 
@@ -258,45 +258,169 @@
         return rows;
     }
 
-    // ========== 2. DATA LOADING & SYNCHRONIZATION ==========
+    // ========== 2. DATA LOADING, CACHING & FAST SYNCHRONIZATION ==========
+    const CACHE_KEYS = {
+        PRODUCTS: 'sst_products_catalog_v3',
+        SETTINGS: 'sst_store_settings_v3',
+        TIMESTAMP: 'sst_catalog_timestamp_v3'
+    };
+
+    let lateLoaderTimer = null;
+    let lateLoaderUpdateTimer = null;
+
+    function showLateLoader() {
+        const el = document.getElementById('shop-late-loader');
+        if (el) {
+            el.style.display = 'block';
+            el.classList.remove('fade-out');
+        }
+    }
+
+    function updateLateLoaderMessage(text) {
+        const desc = document.getElementById('late-loader-desc');
+        if (desc) {
+            desc.textContent = text;
+        }
+    }
+
+    function hideLateLoader() {
+        if (lateLoaderTimer) {
+            clearTimeout(lateLoaderTimer);
+            lateLoaderTimer = null;
+        }
+        if (lateLoaderUpdateTimer) {
+            clearTimeout(lateLoaderUpdateTimer);
+            lateLoaderUpdateTimer = null;
+        }
+        const el = document.getElementById('shop-late-loader');
+        if (el) {
+            el.classList.add('fade-out');
+            setTimeout(() => {
+                if (el.classList.contains('fade-out')) {
+                    el.style.display = 'none';
+                }
+            }, 300);
+        }
+    }
+
+    /**
+     * Ultra-Fast Catalog Loader:
+     * 1. Instant Cache Render (<10ms): If localStorage contains valid products, render immediately.
+     * 2. Instant Local Fallback (<40ms): If cache is empty, load products.json immediately.
+     * 3. Late Animation: If loading takes >280ms, gracefully display the animated grocery loader.
+     * 4. Seamless Background Sync: Synchronize with live Google Sheet without delaying page load.
+     */
     async function loadCatalog() {
-        renderSkeletons();
-        const syncStatusEl = document.getElementById('sync-status-text');
+        let initialRenderDone = false;
 
-        let googleProductsLoaded = false;
+        // 1. Try instant localStorage cache
+        try {
+            const cachedProducts = localStorage.getItem(CACHE_KEYS.PRODUCTS);
+            const cachedSettings = localStorage.getItem(CACHE_KEYS.SETTINGS);
+            if (cachedProducts) {
+                const parsedCached = JSON.parse(cachedProducts);
+                if (Array.isArray(parsedCached) && parsedCached.length > 0) {
+                    allProducts = parsedCached;
+                    if (cachedSettings) {
+                        try {
+                            const parsedSet = JSON.parse(cachedSettings);
+                            settings = Object.assign(settings, parsedSet);
+                        } catch (e) {}
+                    }
+                    finishLoading();
+                    initialRenderDone = true;
+                }
+            }
+        } catch (e) {
+            console.warn('[Sri Sai Traders] Cache read warning:', e);
+        }
 
-        // Try Google Sheet CSV endpoints in sequence
+        // 2. If no cache, render skeletons & set late animation timer (triggers only if slow > 280ms)
+        if (!initialRenderDone) {
+            renderSkeletons();
+            lateLoaderTimer = setTimeout(() => {
+                showLateLoader();
+                lateLoaderUpdateTimer = setTimeout(() => {
+                    updateLateLoaderMessage('Syncing live store inventory & available stock...');
+                }, 2200);
+            }, 280);
+
+            // Fetch local bundled catalog immediately (fastest cold start < 40ms)
+            try {
+                const fallbackRes = await fetch('products.json?v=' + Date.now());
+                if (fallbackRes.ok) {
+                    const data = await fallbackRes.json();
+                    if (data.products && Array.isArray(data.products) && data.products.length > 0) {
+                        allProducts = data.products.map(p => ({
+                            id: p.product_id,
+                            name: p.product_name,
+                            category: p.category,
+                            description: p.description || '',
+                            price: p.price !== null && p.price !== '' ? Number(p.price) : null,
+                            price_type: p.price_type || 'fixed',
+                            unit: p.unit || '',
+                            image: resolveProductImage(p.image_url, p.category),
+                            stock_quantity: Number(p.stock_quantity) || 0,
+                            low_stock_threshold: Number(p.low_stock_threshold) || 5,
+                            is_active: p.is_active === true || String(p.is_active).toUpperCase() === 'TRUE',
+                            is_featured: p.is_featured === true || String(p.is_featured).toUpperCase() === 'TRUE',
+                            sort_order: Number(p.sort_order) || 999,
+                            updated_at: p.updated_at || ''
+                        }));
+                        hideLateLoader();
+                        finishLoading();
+                        initialRenderDone = true;
+                        try {
+                            localStorage.setItem(CACHE_KEYS.PRODUCTS, JSON.stringify(allProducts));
+                        } catch (e) {}
+                    }
+                }
+            } catch (fallbackErr) {
+                console.warn('[Sri Sai Traders] Local fallback fetch error:', fallbackErr);
+            }
+        }
+
+        // 3. Trigger non-blocking live Google Sheet synchronization in background
+        syncGoogleSheetInBackground(initialRenderDone);
+    }
+
+    /**
+     * Non-blocking background sync with Google Sheet.
+     * Keeps prices, stock, and new items 100% up to date without slowing down page load.
+     */
+    async function syncGoogleSheetInBackground(alreadyRendered) {
+        let liveProducts = null;
+
         for (const endpoint of getGoogleCsvEndpoints()) {
             try {
                 const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), CONFIG.TIMEOUT_MS);
+                const timeoutId = setTimeout(() => controller.abort(), 3500);
                 const res = await fetch(endpoint, { signal: controller.signal });
                 clearTimeout(timeoutId);
 
                 if (res.ok) {
                     const text = await res.text();
-                    // Validate that the response is genuine CSV data and not an HTML login page
                     if (!text.trim().startsWith('<') && !text.includes('ServiceLogin') && !text.includes('google-site-verification')) {
                         const parsed = parseProductsCSV(text);
                         if (parsed && parsed.length > 0) {
-                            allProducts = parsed;
-                            googleProductsLoaded = true;
-                            if (syncStatusEl) {
-                                syncStatusEl.textContent = 'Live Google Sheet Connected';
-                                syncStatusEl.style.color = '#1F7A4C';
-                            }
-                            console.log(`[Sri Sai Traders] Loaded ${parsed.length} products live from Google Sheet via ${endpoint}`);
+                            liveProducts = parsed;
                             break;
                         }
                     }
                 }
             } catch (err) {
-                // Try next endpoint
+                // Continue to next endpoint
             }
         }
 
-        // If Google Sheet was successfully loaded, also try settings tab
-        if (googleProductsLoaded) {
+        if (liveProducts && liveProducts.length > 0) {
+            allProducts = liveProducts;
+            try {
+                localStorage.setItem(CACHE_KEYS.PRODUCTS, JSON.stringify(liveProducts));
+                localStorage.setItem(CACHE_KEYS.TIMESTAMP, String(Date.now()));
+            } catch (e) {}
+
+            // Sync settings if available
             for (const setEndpoint of getGoogleSettingsEndpoints()) {
                 try {
                     const setRes = await fetch(setEndpoint);
@@ -304,53 +428,25 @@
                         const setText = await setRes.text();
                         if (!setText.trim().startsWith('<')) {
                             parseSettingsCSV(setText);
+                            try {
+                                localStorage.setItem(CACHE_KEYS.SETTINGS, JSON.stringify(settings));
+                            } catch (e) {}
                             break;
                         }
                     }
-                } catch (e) {
-                    // non-fatal
-                }
+                } catch (e) {}
             }
-            finishLoading();
-            return;
-        }
 
-        // Fallback to local products.json if Google Sheet is unreachable or restricted
-        try {
-            const fallbackRes = await fetch('products.json?v=' + Date.now());
-            if (fallbackRes.ok) {
-                const data = await fallbackRes.json();
-                if (data.products && Array.isArray(data.products)) {
-                    allProducts = data.products.map(p => ({
-                        id: p.product_id,
-                        name: p.product_name,
-                        category: p.category,
-                        description: p.description || '',
-                        price: p.price !== null && p.price !== '' ? Number(p.price) : null,
-                        price_type: p.price_type || 'fixed',
-                        unit: p.unit || '',
-                        image: resolveProductImage(p.image_url, p.category),
-                        stock_quantity: Number(p.stock_quantity) || 0,
-                        low_stock_threshold: Number(p.low_stock_threshold) || 5,
-                        is_active: p.is_active === true || String(p.is_active).toUpperCase() === 'TRUE',
-                        is_featured: p.is_featured === true || String(p.is_featured).toUpperCase() === 'TRUE',
-                        sort_order: Number(p.sort_order) || 999,
-                        updated_at: p.updated_at || ''
-                    }));
-                    if (syncStatusEl) {
-                        syncStatusEl.textContent = 'Store Catalog (Local / Offline)';
-                        syncStatusEl.title = 'Google Sheet needs public viewing permission. Showing local catalog.';
-                    }
-                    finishLoading();
-                    return;
-                }
-            }
-        } catch (fallbackErr) {
-            console.error('Failed to load local fallback:', fallbackErr);
-        }
+            hideLateLoader();
 
-        // Error view
-        renderErrorState();
+            // Seamlessly update catalog and categories without disrupting user's search or cart
+            updateCategoryCounts();
+            renderProducts();
+            updateCartUI();
+        } else if (!alreadyRendered) {
+            hideLateLoader();
+            renderErrorState();
+        }
     }
 
     function parseProductsCSV(csvText) {
@@ -580,16 +676,20 @@
             return;
         }
 
-        grid.innerHTML = filtered.map(p => renderCardHTML(p)).join('');
+        grid.innerHTML = filtered.map((p, idx) => renderCardHTML(p, idx)).join('');
     }
 
-    function renderCardHTML(p) {
+    function renderCardHTML(p, idx) {
         const isOutOfStock = p.stock_quantity <= 0;
         const isLowStock = !isOutOfStock && p.stock_quantity <= p.low_stock_threshold;
 
         const cartItem = cart.find(item => item.id === p.id);
         const qtyInCart = cartItem ? cartItem.quantity : 0;
         const isAtMaxStock = qtyInCart >= p.stock_quantity;
+
+        // Above-the-fold image priority loading for ultra-fast perceived performance
+        const isPriority = typeof idx === 'number' && idx < 6;
+        const imgLoadingAttrs = isPriority ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"';
 
         // Pricing Format
         let priceHtml = '';
@@ -658,7 +758,7 @@
         return `
             <article class="product-card ${isOutOfStock ? 'out-of-stock' : ''}" data-id="${p.id}">
                 <div class="card-image-wrap" onclick="window.openQuickViewModal('${p.id}')" role="button" tabindex="0" aria-label="View ${escapeHtml(p.name)}">
-                    <img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}" class="card-product-img" loading="lazy" decoding="async" referrerpolicy="no-referrer" width="300" height="300"
+                    <img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}" class="card-product-img" ${imgLoadingAttrs} decoding="async" referrerpolicy="no-referrer" width="300" height="300"
                         onerror="window.handleImageError(this, '${escapeHtml(p.category)}');">
                     ${badgeHtml}
                 </div>
