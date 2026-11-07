@@ -4908,42 +4908,116 @@ body:not(.shop-body) {
     }
 }
 
-/* ========== OFFER BANNER ========== */
-.offer-banner {
-    background: linear-gradient(90deg, var(--color-chocolate), var(--color-leather));
-    color: var(--color-cream);
-    border-bottom: 1px solid var(--border-gold);
-    padding: 10px 0;
-    text-align: center;
-    font-size: 0.9rem;
-    font-weight: 600;
+/* ========== ROTATING PREMIUM QUOTE TICKER ========== */
+.quote-ticker-bar {
+    background: #2D160A;
+    background: linear-gradient(90deg, #261208 0%, #3E1F0E 50%, #261208 100%);
+    color: #FAF7F0;
+    border-bottom: 1px solid rgba(212, 162, 74, 0.28);
     position: relative;
     z-index: 1001;
+    overflow: hidden;
+    user-select: none;
 }
 
-.banner-content {
+.quote-ticker-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 7px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-height: 38px;
+    box-sizing: border-box;
+}
+
+.quote-gold-icon {
+    color: #D4A24A;
+    font-size: 0.72rem;
+    opacity: 0.85;
+    flex-shrink: 0;
+}
+
+.quote-slider {
+    position: relative;
+    flex: 1;
+    max-width: 860px;
+    min-height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.quote-slide {
+    position: absolute;
+    width: 100%;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.55s cubic-bezier(0.25, 1, 0.5, 1), transform 0.55s cubic-bezier(0.25, 1, 0.5, 1);
+    pointer-events: none;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
 }
 
-.banner-close {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 1.4rem;
-    cursor: pointer;
-    position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    opacity: 0.7;
-    transition: var(--transition-fast);
+.quote-slide.active {
+    opacity: 1;
+    transform: translateY(0);
+    position: relative;
+    pointer-events: auto;
 }
 
-.banner-close:hover {
-    opacity: 1;
+.quote-badge {
+    display: inline-block;
+    background: rgba(212, 162, 74, 0.18);
+    color: #D4A24A;
+    border: 1px solid rgba(212, 162, 74, 0.38);
+    border-radius: 999px;
+    padding: 1px 9px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    flex-shrink: 0;
+}
+
+.quote-text {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: #FAF7F0;
+    letter-spacing: 0.25px;
+    line-height: 1.35;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@media (max-width: 768px) {
+    .quote-ticker-container {
+        padding: 6px 12px;
+        min-height: 36px;
+        gap: 8px;
+    }
+
+    .quote-gold-icon {
+        display: none;
+    }
+
+    .quote-badge {
+        font-size: 0.62rem;
+        padding: 1px 7px;
+    }
+
+    .quote-text {
+        font-size: 0.74rem;
+        white-space: normal;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+    }
 }
 
 /* ========== TRUST & DELIVERY SECTION ========== */

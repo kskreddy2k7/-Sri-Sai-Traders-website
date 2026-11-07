@@ -867,12 +867,54 @@
         };
     }
 
-    // ========== MISC UI ==========
-    const offerBanner = document.getElementById('offer-banner');
-    const closeBannerBtn = document.getElementById('close-banner');
-    if (closeBannerBtn && offerBanner) {
-        closeBannerBtn.onclick = () => offerBanner.style.display = 'none';
+    // ========== ROTATING PREMIUM QUOTE TICKER ==========
+    function initQuoteTicker() {
+        const slides = document.querySelectorAll('.quote-slide');
+        if (!slides || slides.length === 0) return;
+
+        let currentIndex = 0;
+        let tickerInterval = null;
+        const ROTATE_INTERVAL = 4500; // 4.5 seconds
+
+        function showSlide(index) {
+            slides.forEach((slide, idx) => {
+                if (idx === index) {
+                    slide.classList.add('active');
+                } else {
+                    slide.classList.remove('active');
+                }
+            });
+        }
+
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % slides.length;
+            showSlide(currentIndex);
+        }
+
+        function startTicker() {
+            if (!tickerInterval) {
+                tickerInterval = setInterval(nextSlide, ROTATE_INTERVAL);
+            }
+        }
+
+        function stopTicker() {
+            if (tickerInterval) {
+                clearInterval(tickerInterval);
+                tickerInterval = null;
+            }
+        }
+
+        const container = document.getElementById('quote-ticker-bar');
+        if (container) {
+            container.addEventListener('mouseenter', stopTicker);
+            container.addEventListener('mouseleave', startTicker);
+            container.addEventListener('touchstart', stopTicker, { passive: true });
+            container.addEventListener('touchend', startTicker, { passive: true });
+        }
+
+        startTicker();
     }
+    initQuoteTicker();
 
     function showToast(msg) {
         let container = document.querySelector('.toast-container');
