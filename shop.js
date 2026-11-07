@@ -20,17 +20,24 @@
         TIMEOUT_MS: 4000
     };
 
-    // Construct Direct Google Query & Export URLs
-    const GOOGLE_CSV_ENDPOINTS = [
-        `https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(CONFIG.SHEET_NAME_PRODUCTS)}`,
-        `https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID}/export?format=csv&sheet=${encodeURIComponent(CONFIG.SHEET_NAME_PRODUCTS)}`,
-        `https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID}/export?format=csv&gid=0`,
-        `https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID}/gviz/tq?tqx=out:csv`
-    ];
-    const GOOGLE_SETTINGS_ENDPOINTS = [
-        `https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(CONFIG.SHEET_NAME_SETTINGS)}`,
-        `https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID}/export?format=csv&sheet=${encodeURIComponent(CONFIG.SHEET_NAME_SETTINGS)}`
-    ];
+    // Construct Direct Google Query & Export URLs with Cache-Busting
+    function getGoogleCsvEndpoints() {
+        const nc = Date.now();
+        return [
+            `https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(CONFIG.SHEET_NAME_PRODUCTS)}&_nc=${nc}`,
+            `https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID}/export?format=csv&sheet=${encodeURIComponent(CONFIG.SHEET_NAME_PRODUCTS)}&_nc=${nc}`,
+            `https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID}/export?format=csv&gid=0&_nc=${nc}`,
+            `https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID}/gviz/tq?tqx=out:csv&_nc=${nc}`
+        ];
+    }
+
+    function getGoogleSettingsEndpoints() {
+        const nc = Date.now();
+        return [
+            `https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(CONFIG.SHEET_NAME_SETTINGS)}&_nc=${nc}`,
+            `https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID}/export?format=csv&sheet=${encodeURIComponent(CONFIG.SHEET_NAME_SETTINGS)}&_nc=${nc}`
+        ];
+    }
 
     // State
     let allProducts = [];
@@ -80,36 +87,70 @@
     }
 
     /**
-     * Resolves and validates product image URLs from Google Sheets.
+     * Resolves and formats product image URLs from Google Sheets.
      * Supports:
-     *   - Google Drive shared links (converts to high-res, crisp 1000px preview)
-     *   - Publicly accessible HTTPS image URLs (Imgur, Cloudinary, AWS S3, etc.)
-     *   - Valid local asset paths (e.g. assets/milk.jpg)
+     *   - Google Drive shared links (converts to high-res Google UserContent CDN link)
+     *   - Google Images search URLs (extracts the actual image URL from imgurl= parameter)
+     *   - Dropbox shared links (converts dl=0 to raw=1 for direct image loading)
+     *   - Imgur & Postimages page links (converts to direct image file links)
+     *   - Direct public HTTPS image URLs from any CDN or e-commerce host
+     *   - Valid local project assets (assets/...)
      * Filters out:
-     *   - Local offline filenames (e.g. "MILK IMAGE.png", "photo.jpg") -> cleanly falls back to branded placeholder.
+     *   - Local offline filenames (e.g. "MILK IMAGE.png") -> cleanly returns branded category placeholder.
      */
     function resolveProductImage(rawUrl, category) {
         if (!rawUrl || typeof rawUrl !== 'string') {
             return getFallbackImage(category);
         }
 
-        const trimmed = rawUrl.trim();
+        let trimmed = rawUrl.trim();
         if (!trimmed) {
             return getFallbackImage(category);
         }
 
-        // 1. Google Drive URLs (converts /d/ID, id=ID, open?id=ID to high-res crisp preview)
-        if (trimmed.includes('drive.google.com') || trimmed.includes('docs.google.com')) {
+        // 1. Google Images Search Result URL (extracts direct image URL from imgurl= parameter)
+        if (trimmed.includes('google.com/imgres') || trimmed.includes('google.co.in/imgres')) {
+            try {
+                const urlObj = new URL(trimmed);
+                const actualImg = urlObj.searchParams.get('imgurl');
+                if (actualImg) {
+                    trimmed = decodeURIComponent(actualImg);
+                }
+            } catch (e) {
+                // proceed with trimmed
+            }
+        }
+
+        // 2. Google Drive URLs (extracts file ID and routes to Google's public UserContent CDN)
+        if (trimmed.includes('drive.google.com') || trimmed.includes('docs.google.com') || trimmed.includes('lh3.googleusercontent.com')) {
             const match = trimmed.match(/\/d\/([a-zA-Z0-9_-]+)/) ||
                           trimmed.match(/[?&]id=([a-zA-Z0-9_-]+)/) ||
                           trimmed.match(/fileId=([a-zA-Z0-9_-]+)/);
             if (match && match[1]) {
-                // High-resolution 1000px direct thumbnail (unblurred, fast loading)
-                return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w1000`;
+                const fileId = match[1];
+                // Google UserContent CDN (Fastest, unthrottled, zero cookie restrictions)
+                return `https://lh3.googleusercontent.com/d/${fileId}=w1000`;
             }
         }
 
-        // 2. Direct HTTP or HTTPS image URLs
+        // 3. Dropbox links (converts preview page to direct image raw stream)
+        if (trimmed.includes('dropbox.com')) {
+            return trimmed.replace('dl=0', 'raw=1').replace('?dl=0', '?raw=1');
+        }
+
+        // 4. Imgur page links (e.g. imgur.com/XYZ -> i.imgur.com/XYZ.jpg)
+        if (/^https?:\/\/imgur\.com\/([a-zA-Z0-9]+)$/i.test(trimmed)) {
+            const id = trimmed.match(/imgur\.com\/([a-zA-Z0-9]+)/)[1];
+            return `https://i.imgur.com/${id}.jpg`;
+        }
+
+        // 5. Postimages page links
+        if (/^https?:\/\/postimg\.cc\/([a-zA-Z0-9]+)$/i.test(trimmed)) {
+            const id = trimmed.match(/postimg\.cc\/([a-zA-Z0-9]+)/)[1];
+            return `https://i.postimg.cc/${id}/image.jpg`;
+        }
+
+        // 6. Direct HTTP or HTTPS image URLs
         if (/^https?:\/\//i.test(trimmed)) {
             try {
                 return encodeURI(decodeURI(trimmed));
@@ -118,15 +159,47 @@
             }
         }
 
-        // 3. Known valid local asset path
+        // 7. Known valid local asset path
         if (trimmed.startsWith('assets/')) {
             return trimmed;
         }
 
-        // 4. Do NOT treat local raw filenames like "MILK IMAGE.png" or "C:\..." as working online URLs
-        // As per requirement: display clean branded Sri Sai Traders placeholder instead
+        // 8. Do NOT treat local raw filenames like "MILK IMAGE.png" as working online URLs
         return getFallbackImage(category);
     }
+
+    /**
+     * Resilient Multi-Tier Image Error Recovery Handler.
+     * If an external image fails to load, it attempts alternative Google CDNs before falling back to SVG.
+     */
+    window.handleImageError = (imgEl, category) => {
+        if (!imgEl) return;
+        const currentSrc = imgEl.src || '';
+        const retryCount = Number(imgEl.dataset.retry || 0);
+
+        // Check if this was a Google Drive file ID
+        const driveMatch = currentSrc.match(/\/d\/([a-zA-Z0-9_-]+)/) ||
+                           currentSrc.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+
+        if (driveMatch && driveMatch[1] && retryCount < 2) {
+            const fileId = driveMatch[1];
+            imgEl.dataset.retry = retryCount + 1;
+            if (retryCount === 0) {
+                // Tier 2: Try Google Drive thumbnail endpoint
+                imgEl.src = `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
+                return;
+            } else if (retryCount === 1) {
+                // Tier 3: Try Google Drive export view endpoint
+                imgEl.src = `https://drive.google.com/uc?export=view&id=${fileId}`;
+                return;
+            }
+        }
+
+        // Final Tier: Clean Branded Sri Sai Traders SVG Placeholder
+        imgEl.onerror = null;
+        imgEl.src = getFallbackImage(category);
+        imgEl.classList.add('is-fallback');
+    };
 
     // Escape HTML Helper
     function escapeHtml(str) {
@@ -193,7 +266,7 @@
         let googleProductsLoaded = false;
 
         // Try Google Sheet CSV endpoints in sequence
-        for (const endpoint of GOOGLE_CSV_ENDPOINTS) {
+        for (const endpoint of getGoogleCsvEndpoints()) {
             try {
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), CONFIG.TIMEOUT_MS);
@@ -224,7 +297,7 @@
 
         // If Google Sheet was successfully loaded, also try settings tab
         if (googleProductsLoaded) {
-            for (const setEndpoint of GOOGLE_SETTINGS_ENDPOINTS) {
+            for (const setEndpoint of getGoogleSettingsEndpoints()) {
                 try {
                     const setRes = await fetch(setEndpoint);
                     if (setRes.ok) {
@@ -244,7 +317,7 @@
 
         // Fallback to local products.json if Google Sheet is unreachable or restricted
         try {
-            const fallbackRes = await fetch('products.json');
+            const fallbackRes = await fetch('products.json?v=' + Date.now());
             if (fallbackRes.ok) {
                 const data = await fallbackRes.json();
                 if (data.products && Array.isArray(data.products)) {
@@ -585,8 +658,8 @@
         return `
             <article class="product-card ${isOutOfStock ? 'out-of-stock' : ''}" data-id="${p.id}">
                 <div class="card-image-wrap" onclick="window.openQuickViewModal('${p.id}')" role="button" tabindex="0" aria-label="View ${escapeHtml(p.name)}">
-                    <img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}" class="card-product-img" loading="lazy" decoding="async" width="300" height="300"
-                        onerror="this.onerror=null; this.src='${getFallbackImage(p.category)}'; this.classList.add('is-fallback');">
+                    <img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}" class="card-product-img" loading="lazy" decoding="async" referrerpolicy="no-referrer" width="300" height="300"
+                        onerror="window.handleImageError(this, '${escapeHtml(p.category)}');">
                     ${badgeHtml}
                 </div>
 
@@ -879,7 +952,8 @@
                     return `
                         <div class="cart-item-row">
                             <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.name)}" class="cart-item-thumb"
-                                onerror="this.onerror=null; this.src='${getFallbackImage(item.category)}';">
+                                loading="lazy" decoding="async" referrerpolicy="no-referrer" width="60" height="60"
+                                onerror="window.handleImageError(this, '${escapeHtml(item.category)}');">
                             <div class="cart-item-info">
                                 <h4 class="cart-item-title">${escapeHtml(item.name)}</h4>
                                 ${item.unit ? `<span class="cart-item-unit">${escapeHtml(item.unit)}</span>` : ''}
@@ -1093,10 +1167,9 @@
             modalImg.src = p.image;
             modalImg.alt = p.name;
             modalImg.decoding = 'async';
+            modalImg.setAttribute('referrerpolicy', 'no-referrer');
             modalImg.onerror = function () {
-                this.onerror = null;
-                this.src = getFallbackImage(p.category);
-                this.classList.add('is-fallback');
+                window.handleImageError(this, p.category);
             };
         }
         document.getElementById('modal-title').textContent = p.name;
